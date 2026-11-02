@@ -1,0 +1,4 @@
+project_root = ".."
+input = "data/raw/example_data.rda"
+processed = "data/processed"
+reports = "reports"
