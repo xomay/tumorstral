@@ -35,7 +35,7 @@ sable ont nécessité une autorisation pour les dépendances et les données.
 
 ## Utiliser le projet sur un autre appareil
 
-Le dépôt distant est prévu sous `xomay/tumortwin` sur GitHub, en accès privé.
+Le dépôt distant est disponible sur [GitHub : xomay/tumortwin](https://github.com/xomay/tumortwin), en accès privé.
 Avec Git et uv installés et votre compte GitHub authentifié :
 
 ```sh
