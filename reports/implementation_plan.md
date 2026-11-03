@@ -10,7 +10,12 @@
 5. Tester le schéma, les valeurs manquantes, les doublons, les identités, les
    unités temporelles et le pipeline complet hors réseau ; exécuter sur le jeu réel.
 
-## Phase 2 proposée, non engagée
+## Phase 2 autorisée et réalisée
+La demande d'implémentation du 3 novembre 2026 autorise cette phase uniquement.
+Voir le [guide d'exécution](phase2_implementation.md) et le
+[bilan observé](phase2_validation.md). Les phases 3–5 restent à valider.
+
+### Protocole initial
 Le protocole détaillé à valider est dans [phase2_plan.md](phase2_plan.md).
 Il précise la séparation 104/26 animaux, les horizons exacts 3/7/14 jours,
 les ajustements, la gestion des échecs, les métriques et les critères d'acceptation.

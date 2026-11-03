@@ -162,6 +162,8 @@ Les tableaux générés restent la source détaillée de ces résultats.
 
 Le [protocole de phase 2](reports/phase2_plan.md) a été autorisé le 3 novembre 2026.
 Voir le [guide d'exécution](reports/phase2_implementation.md).
+Le [bilan de validation et les résultats de test](reports/phase2_validation.md)
+présentent l'expérience réelle, ses erreurs et ses limites.
 
 Depuis un checkout propre et committé, après `uv sync --locked` et téléchargement :
 
