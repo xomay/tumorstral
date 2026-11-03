@@ -1,9 +1,8 @@
 # Phase 2 — Protocole proposé pour validation
 
-Statut : **proposition du 3 novembre 2026, non approuvée et non implémentée**.
-La demande de planification n'autorise ni l'ajustement des modèles, ni la
-production de scores prédictifs, ni les phases 3–5. Aucun résultat prédictif
-n'est présenté dans ce document.
+Statut : **protocole autorisé le 3 novembre 2026 par la demande « implémente la phase 2 »**.
+Les phases 3–5 restent soumises à une validation distincte. Ce document décrit
+le protocole ; les résultats sont publiés séparément.
 
 ## 1. Objectif et limites de l'expérience
 
@@ -322,5 +321,4 @@ prédictive n'est pas un critère logiciel d'acceptation.
 5. Exécuter le test ; produire scores, couvertures, graphiques et limites.
 6. Soumettre le bilan de phase 2. La phase 3 nécessitera une validation distincte.
 
-**Décision demandée : approuver ou amender ce protocole avant de commencer
-l'implémentation de la phase 2.**
+**Autorisation reçue pour la phase 2 uniquement.**

@@ -20,6 +20,7 @@ reports/tests.xml
 reports/phase1_report.md
 reports/glossary.md
 reports/figures/
+reports/phase2/
 
 # Local credentials, app metadata and editor files.
 .env

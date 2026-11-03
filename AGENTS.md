@@ -1,8 +1,9 @@
 # TumorTwin
 
 ## Périmètre
-Implémenter uniquement la phase 1. Les phases 2–5 nécessitent une validation
-explicite de l'utilisateur. Ne pas ajouter de fine-tuning, calibration externe,
+Les phases 1 et 2 sont autorisées (phase 2 validée le 3 novembre 2026).
+Suivre le protocole `reports/phase2_plan.md`. Les phases 3–5 nécessitent une
+validation explicite distincte. Ne pas ajouter de fine-tuning, calibration externe,
 serveur [MCP](src/tumortwin/glossary.md#mcp) ni interprétation clinique.
 
 ## Conventions
@@ -32,7 +33,7 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
 - Signaler les doublons, volumes négatifs, valeurs non numériques et historiques
   courts ; ne pas agréger silencieusement les mesures dupliquées.
 - Séparer les individus entre apprentissage et test ; aucune cible future
-  en covariable. Phase 1 : [EDA](src/tumortwin/glossary.md#eda) uniquement, aucune évaluation de modèle.
+  en covariable. Reconstruire les contrôles de chaque préfixe sans données futures.
 - Comparaisons de traitements descriptives, sans inférence causale.
 - Ne pas inventer de données ni de résultats. Documenter les limites biologiques.
 - Les images [TCIA](src/tumortwin/glossary.md#tcia) ne constituent pas des trajectoires sans suivi démontré.
@@ -42,3 +43,7 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
 `uv run pytest`
 `uv run tumortwin download`
 `uv run tumortwin eda --config configs/phase1.toml`
+`uv run tumortwin phase2 split`
+`uv run tumortwin phase2 develop`
+`uv run tumortwin phase2 freeze`
+`uv run tumortwin phase2 evaluate`

@@ -1,8 +1,8 @@
 # TumorTwin
 
 Prototype scientifique reproductible combinant, à terme, prévision temporelle
-et modélisation mécanistique tumorale. **Seule la phase 1 est implémentée** :
-chargement INSPECTumours, contrôle qualité et analyse exploratoire.
+et modélisation mécanistique tumorale. **Les phases 1 et 2 sont implémentées** :
+analyse exploratoire et comparaison de quatre modèles individuels de référence.
 
 **Aide à la lecture :** les acronymes du texte sont cliquables.
 Consultez le [glossaire des acronymes](src/tumortwin/glossary.md).
@@ -121,8 +121,8 @@ reports/implementation_plan.md    plan et proposition de phase 2
 reports/validation.md             résultats de validation dans cet environnement
 ```
 
-Les répertoires baselines, timestral, spatial, coupling et evaluation sont
-réservés aux phases suivantes, sans code de modèle. `notebooks/` est facultatif ;
+Les répertoires baselines et evaluation contiennent la phase 2. Les répertoires
+timestral, spatial et coupling restent réservés aux phases suivantes. `notebooks/` est facultatif ;
 la [CLI](src/tumortwin/glossary.md#cli) suffit à reproduire toute l'analyse sans état interactif caché.
 
 ## Résultats observés (2 novembre 2026)
@@ -152,26 +152,44 @@ Les tableaux générés restent la source détaillée de ces résultats.
   Un libellé Drug A/B commun ne prouve pas un même médicament entre études.
 - Le jeu d'exemple et ses six colonnes ne documentent pas toute la biologie,
   les protocoles, ni la représentativité d'une population expérimentale.
-- Aucun partage apprentissage/test à ce stade : aucun modèle n'est ajusté.
-  Une séparation par (study, animal_id) sera obligatoire pour la modélisation.
+- La phase 1 n'ajuste aucun modèle. La phase 2 sépare les animaux par
+  (study, animal_id), puis ajuste chaque modèle sur le seul passé disponible.
   Ne pas utiliser cette [EDA](src/tumortwin/glossary.md#eda) globale pour régler un modèle sur les futurs animaux de test.
-- Aucune donnée [TCIA](src/tumortwin/glossary.md#tcia) n'est téléchargée ; aucun suivi longitudinal CT n'est supposé.
+- Aucune donnée [TCIA](src/tumortwin/glossary.md#tcia) n'est téléchargée ; aucun suivi longitudinal [CT](src/tumortwin/glossary.md#ct) n'est supposé.
   Aucune prédiction clinique validée n'est revendiquée.
 
-## Phase 2 proposée — à valider
+## Phase 2 — modèles de référence
 
-Voir le [protocole détaillé de phase 2](reports/phase2_plan.md), proposé le
-3 novembre 2026. Il reste à valider ; aucun modèle de phase 2 n'est implémenté.
+Le [protocole de phase 2](reports/phase2_plan.md) a été autorisé le 3 novembre 2026.
+Voir le [guide d'exécution](reports/phase2_implementation.md).
 
-Figer les individus d'apprentissage et de test avant tout choix de réglage.
-Définir des préfixes d'observation et des horizons comparables en jours réels,
-puis ajuster avec SciPy persistance, exponentiel, logistique et Gompertz.
-Comparer [MAE](src/tumortwin/glossary.md#mae)/[RMSE](src/tumortwin/glossary.md#rmse) et erreurs relatives sur cibles strictement positives,
-sur les mêmes couples origine/cible pour tous les modèles. Rapporter les
-échecs de convergence et les paramètres mal identifiables ; ne pas réutiliser
-les cibles futures comme covariables. Les historiques très courts limitent
-l'identifiabilité des modèles logistique et Gompertz.
+Depuis un checkout propre et committé, après `uv sync --locked` et téléchargement :
+
+```sh
+uv run tumortwin phase2 split
+uv run tumortwin phase2 develop
+uv run tumortwin phase2 freeze
+uv run tumortwin phase2 evaluate
+```
+
+La séparation comprend 104 animaux de développement et 26 de test. Les
+prévisions principales utilisent au moins six mesures passées, aux horizons
+exacts de 3, 7 et 14 jours. Le critère principal est la [MAE](src/tumortwin/glossary.md#mae)
+à sept jours, donnant le même poids à chaque animal. La [RMSE](src/tumortwin/glossary.md#rmse)
+et les erreurs relatives complètent le bilan ; seules ces dernières excluent
+les cibles nulles. Aucun rééchantillonnage ou volume futur en covariable.
+Les résultats du test sont bloqués tant que le développement n'est pas complet
+et que la configuration n'a pas été figée sur un commit propre.
+
+Les commandes affichent le répertoire `reports/phase2/<empreinte>/`, contenant
+un rapport avec glossaire local, six figures, les prévisions, les cibles exactes,
+les scores par animal et les diagnostics de tous les départs du solveur.
+Les résultats générés sont ignorés par Git. Chaque changement de code,
+configuration, protocole, données ou commit définit une nouvelle expérience.
+Les phases terminées sont vérifiées par empreinte avant réutilisation ; une
+phase incomplète est conservée pour audit et nécessite un nouveau chemin de
+sortie pour recommencer. Aucun écrasement silencieux.
 
 Le projet conserve exactement cinq phases : [EDA](src/tumortwin/glossary.md#eda), baselines, Timestral zero-shot,
-réaction-diffusion [3D](src/tumortwin/glossary.md#3d), couplage. **Les phases 2–5 attendent validation.**
+réaction-diffusion [3D](src/tumortwin/glossary.md#3d), couplage. **Les phases 3–5 attendent validation.**
 L'[API](src/tumortwin/glossary.md#api) Timestral sera vérifiée à la phase 3, sans fine-tuning ni calibration externe.

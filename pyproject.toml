@@ -8,7 +8,13 @@ version = "0.1.0"
 description = "Reproducible exploratory analysis of longitudinal preclinical tumour data"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["numpy>=2.1", "pandas>=2.2", "matplotlib>=3.9", "rdata>=1.0"]
+dependencies = [
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "matplotlib>=3.9",
+    "rdata>=1.0",
+    "scipy>=1.15",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.3"]

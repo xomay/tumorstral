@@ -1,0 +1,27 @@
+project_root = ".."
+input = "data/raw/example_data.rda"
+output = "reports/phase2"
+protocol = "reports/phase2_plan.md"
+seed = 20261103
+test_fraction = 0.2
+horizons = [3, 7, 14]
+primary_horizon = 7
+min_history = 6
+short_histories = [3, 4, 5]
+bootstrap_samples = 2000
+bootstrap_min_animals = 10
+min_model_coverage = 0.95
+min_common_coverage = 0.9
+workers = 4
+
+[fit]
+max_nfev = 2000
+tolerance = 1e-8
+volume_lower = 1e-6
+volume_upper_factor = 1000.0
+rate_bound = 2.0
+exponential_starts = [-0.1, 0.0, 0.1]
+rate_starts = [0.01, 0.1, 0.5]
+capacity_factors = [0.5, 1.0, 2.0, 10.0]
+condition_threshold = 1e8
+boundary_threshold = 1e-4
