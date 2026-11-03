@@ -1,29 +1,23 @@
-# Plan d'implémentation
+# Organisation des analyses
 
-1. Inspecter Python, les outils et le dépôt ; vérifier le schéma réel de
-   `data/example_data.rda` et les effectifs par (study, animal_id).
-2. Créer le paquet Python avec uv, téléchargement à révision figée, empreinte
-   du fichier brut et adaptateur [RDA](../src/tumortwin/glossary.md#rda)/[CSV](../src/tumortwin/glossary.md#csv) sans imputation.
-3. Auditer chaque ligne, calculer les statistiques par individu, traitement et
-   étude, préserver les dates et caractériser les intervalles irréguliers.
-4. Exporter les données normalisées, tables de qualité, rapport et figures.
-5. Tester le schéma, les valeurs manquantes, les doublons, les identités, les
-   unités temporelles et le pipeline complet hors réseau ; exécuter sur le jeu réel.
+## Analyse exploratoire
 
-## Phase 2 autorisée et réalisée
-La demande d'implémentation du 3 novembre 2026 autorise cette phase uniquement.
+1. Vérifier le schéma réel de `example_data.rda` et les effectifs par (study, animal_id).
+2. Charger les données à révision figée avec empreintes et provenance, sans imputation.
+3. Auditer les lignes, préserver les jours et caractériser les intervalles irréguliers.
+4. Exporter les observations, statistiques descriptives, figures et rapport de qualité.
+5. Vérifier le schéma, les valeurs manquantes, les doublons et le pipeline hors réseau.
+
+## Modèles de référence
+
+Le [protocole expérimental](phase2_plan.md) précise la séparation de 104 animaux
+de développement et 26 de test, les horizons exacts de 3, 7 et 14 jours, les
+ajustements, les métriques et le traitement des échecs.
+
+Les modèles de persistance, exponentiel, logistique et Gompertz sont ajustés
+sur les seuls préfixes disponibles. Les comparaisons utilisent les mêmes
+cibles, avec une pondération égale par animal. Les paramètres mal identifiés
+et les échecs numériques restent visibles dans les exports.
+
 Voir le [guide d'exécution](phase2_implementation.md) et le
-[bilan observé](phase2_validation.md). Les phases 3–5 restent à valider.
-
-### Protocole initial
-Le protocole détaillé à valider est dans [phase2_plan.md](phase2_plan.md).
-Il précise la séparation 104/26 animaux, les horizons exacts 3/7/14 jours,
-les ajustements, la gestion des échecs, les métriques et les critères d'acceptation.
-
-Après validation : figer une séparation par animal (et éventuellement par étude),
-définir les origines de prévision et horizons en jours réels, ajuster persistance,
-exponentiel, logistique et Gompertz avec SciPy sur les préfixes disponibles.
-Comparer [MAE](../src/tumortwin/glossary.md#mae)/[RMSE](../src/tumortwin/glossary.md#rmse) et erreurs relatives uniquement pour les volumes strictement
-positifs, sur les mêmes cibles/horizons ; rapporter échecs et identifiabilité.
-Choisir les réglages sur les individus d'apprentissage seulement. Aucun modèle
-n'est implémenté à ce stade.
+[bilan des résultats](phase2_validation.md).

@@ -77,7 +77,7 @@ identifier précisément les données analysées. Une empreinte n'est pas un chi
 ## TCIA
 
 **The Cancer Imaging Archive.** Archive d'imagerie médicale en cancérologie,
-source envisagée pour les images et segmentations de la phase 4.
+contenant notamment des images et des segmentations tumorales.
 
 ## CT
 
@@ -93,7 +93,7 @@ Le format peut servir à des images et segmentations hors du cerveau.
 ## MCP
 
 **Model Context Protocol.** Protocole reliant des applications d'IA à des outils
-et sources de contexte. Aucun serveur de ce type ne fait partie du projet demandé.
+et sources de contexte. Le projet ne comporte pas de serveur de ce type.
 
 ## IA
 
@@ -123,5 +123,5 @@ Leur sens exact doit toujours être vérifié dans le dictionnaire de la source.
 
 ## 3D
 
-**Trois dimensions spatiales.** Dans les phases ultérieures, désigne la
-représentation spatiale des tissus et de la tumeur, distincte d'une série temporelle.
+**Trois dimensions spatiales.** Désigne la représentation spatiale des tissus
+et de la tumeur, distincte d'une série temporelle.

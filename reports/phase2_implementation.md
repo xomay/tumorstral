@@ -1,6 +1,5 @@
 # Phase 2 — guide d'exécution
 
-La phase 2 est autorisée par la demande utilisateur du 3 novembre 2026.
 Le [protocole](phase2_plan.md) définit les règles scientifiques ; aucun réglage
 ne doit être choisi à partir des scores de test.
 
@@ -93,7 +92,7 @@ ne retirent pas des scores une prévision finie. Les bornes volumétriques sont
 très larges : une proximité relative peut être signalée pour un petit volume
 sans proximité absolue biologique. Le conditionnement est calculé après
 adimensionnement par les étendues de paramètres. Il sert d'alerte locale et
-ne mesure pas une incertitude prédictive validée.
+ne démontre pas la fiabilité de l'incertitude prédictive.
 
 Les zéros ne sont pas imputés. Un historique entièrement nul est non identifiable
 pour les trois ajustements mécanistiques ; il reste traité par persistance et
@@ -105,11 +104,11 @@ prévisions non finies restent des échecs, jamais des suppressions silencieuses
 Les historiques courts, les petits sous-groupes et les rares suivis longs
 limitent l'interprétation. Les modèles monotones ne représentent ni tous les
 effets de traitement ni les reprises tumorales. L'analyse exploratoire a déjà
-porté sur toutes les données : le test n'est pas une validation externe aveugle.
+porté sur toutes les données : le test n'est pas une évaluation externe aveugle.
 
 Les modèles natifs sont comparés sur leur support commun. Le rapport vérifie
 les seuils de couverture (95 % par modèle et 90 % du support commun), avec
-au moins dix animaux à sept jours, avant d'autoriser un classement descriptif.
+au moins dix animaux à sept jours, comme conditions d'un classement descriptif.
 Une amélioration sur la persistance n'est pas un critère d'acceptation logiciel.
 Les tests doivent passer, les données rester intactes et tous les échecs être
-exportés. Les phases 3–5 restent hors périmètre.
+exportés.

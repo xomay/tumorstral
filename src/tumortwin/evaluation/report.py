@@ -209,7 +209,6 @@ elles sont secondaires et ne sont calculées que pour les cibles strictement pos
 Les pourcentages sont des fractions dans les exports (multiplier par 100 pour les lire).
 Les modèles monotones ne représentent pas toutes les réponses ou reprises sous traitement.
 L'analyse exploratoire de phase 1 a déjà vu tout le jeu : ce test n'est pas une
-validation externe aveugle. Aucun effet causal ou usage clinique n'est démontré.
-La phase 3 n'est pas engagée.
+évaluation externe aveugle. Aucun effet causal ou usage clinique n'est démontré.
 """
     (folder/"report.md").write_text(report, encoding="utf-8")

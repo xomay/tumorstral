@@ -1,7 +1,7 @@
 # TumorTwin
 
-Prototype scientifique reproductible combinant, à terme, prévision temporelle
-et modélisation mécanistique tumorale. **Les phases 1 et 2 sont implémentées** :
+Prototype scientifique reproductible de prévision temporelle et de modélisation
+mathématique tumorale. **Les phases 1 et 2 sont implémentées** :
 analyse exploratoire et comparaison de quatre modèles individuels de référence.
 
 **Aide à la lecture :** les acronymes du texte sont cliquables.
@@ -34,8 +34,7 @@ uv run --offline pytest
 ```
 
 Le serveur raw GitHub n'a pas répondu dans l'environnement initial ; le
-téléchargeur utilise l'[API](src/tumortwin/glossary.md#api) GitHub Contents. Les restrictions réseau du bac à
-sable ont nécessité une autorisation pour les dépendances et les données.
+téléchargeur utilise l'[API](src/tumortwin/glossary.md#api) GitHub Contents.
 
 ## Utiliser le projet sur un autre appareil
 
@@ -117,12 +116,11 @@ reports/volume_statistics.csv     distribution des volumes exploitables
 reports/treatment_summary.csv     résumé par étude et traitement
 reports/treatment_by_day.csv      moyenne, médiane, écart-type, IQR et effectifs
 reports/figures/                  distributions, intervalles, courbes, comparaisons
-reports/implementation_plan.md    plan et proposition de phase 2
-reports/validation.md             résultats de validation dans cet environnement
+reports/implementation_plan.md    organisation des analyses
+reports/validation.md             vérifications et résultats de l'analyse exploratoire
 ```
 
-Les répertoires baselines et evaluation contiennent la phase 2. Les répertoires
-timestral, spatial et coupling restent réservés aux phases suivantes. `notebooks/` est facultatif ;
+Les répertoires baselines et evaluation contiennent la phase 2. `notebooks/` est facultatif ;
 la [CLI](src/tumortwin/glossary.md#cli) suffit à reproduire toute l'analyse sans état interactif caché.
 
 ## Résultats observés (2 novembre 2026)
@@ -156,13 +154,13 @@ Les tableaux générés restent la source détaillée de ces résultats.
   (study, animal_id), puis ajuste chaque modèle sur le seul passé disponible.
   Ne pas utiliser cette [EDA](src/tumortwin/glossary.md#eda) globale pour régler un modèle sur les futurs animaux de test.
 - Aucune donnée [TCIA](src/tumortwin/glossary.md#tcia) n'est téléchargée ; aucun suivi longitudinal [CT](src/tumortwin/glossary.md#ct) n'est supposé.
-  Aucune prédiction clinique validée n'est revendiquée.
+  L'aptitude à un usage clinique n'est pas établie.
 
 ## Phase 2 — modèles de référence
 
-Le [protocole de phase 2](reports/phase2_plan.md) a été autorisé le 3 novembre 2026.
+Le [protocole de phase 2](reports/phase2_plan.md) définit les règles de l'expérience.
 Voir le [guide d'exécution](reports/phase2_implementation.md).
-Le [bilan de validation et les résultats de test](reports/phase2_validation.md)
+Le [bilan des vérifications et les résultats de test](reports/phase2_validation.md)
 présentent l'expérience réelle, ses erreurs et ses limites.
 
 Depuis un checkout propre et committé, après `uv sync --locked` et téléchargement :
@@ -191,7 +189,3 @@ configuration, protocole, données ou commit définit une nouvelle expérience.
 Les phases terminées sont vérifiées par empreinte avant réutilisation ; une
 phase incomplète est conservée pour audit et nécessite un nouveau chemin de
 sortie pour recommencer. Aucun écrasement silencieux.
-
-Le projet conserve exactement cinq phases : [EDA](src/tumortwin/glossary.md#eda), baselines, Timestral zero-shot,
-réaction-diffusion [3D](src/tumortwin/glossary.md#3d), couplage. **Les phases 3–5 attendent validation.**
-L'[API](src/tumortwin/glossary.md#api) Timestral sera vérifiée à la phase 3, sans fine-tuning ni calibration externe.

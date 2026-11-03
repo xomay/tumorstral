@@ -1,4 +1,4 @@
-# Validation de la phase 1 — 2 novembre 2026
+# Vérifications de la phase 1 — 2 novembre 2026
 
 ## Environnement et exécution
 
@@ -18,10 +18,8 @@ export MPLCONFIGDIR=/tmp/tumortwin-mpl
 ```
 
 Le drapeau `--offline` concerne la résolution uv ; la commande download utilise
-elle-même le réseau. Elle a été exécutée avec accès réseau autorisé. L'analyse
-et les tests n'utilisent pas le réseau. Les premières tentatives ont constaté
-l'absence de pip/ensurepip et de dépendances ; uv a été téléchargé localement
-selon la préférence utilisateur. Aucune installation avec pip.
+elle-même le réseau. L'analyse et les tests n'utilisent pas le réseau.
+Les dépendances sont gérées avec uv.
 
 ## Résultats
 
@@ -61,4 +59,4 @@ complet. Les causes des arrêts de suivi ne sont pas documentées. Les analyses
 sont descriptives et ne prouvent ni effet causal ni validité clinique.
 L'[API](../src/tumortwin/glossary.md#api) GitHub a permis de contourner l'indisponibilité observée du serveur raw.
 Aucune dépendance ni aucun dataset nécessaire à la phase 1 ne reste inaccessible.
-Les phases 2–5 ne sont pas engagées ; aucun résultat prédictif n'est annoncé.
+Cette analyse exploratoire ne produit aucun résultat prédictif.

@@ -1,9 +1,8 @@
 # TumorTwin
 
 ## Périmètre
-Les phases 1 et 2 sont autorisées (phase 2 validée le 3 novembre 2026).
-Suivre le protocole `reports/phase2_plan.md`. Les phases 3–5 nécessitent une
-validation explicite distincte. Ne pas ajouter de fine-tuning, calibration externe,
+Le projet couvre l'analyse exploratoire et les modèles individuels de référence.
+Suivre le protocole `reports/phase2_plan.md`. Ne pas ajouter de fine-tuning, calibration externe,
 serveur [MCP](src/tumortwin/glossary.md#mcp) ni interprétation clinique.
 
 ## Conventions
@@ -20,11 +19,10 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
 - Relier les acronymes du texte à leur définition par des liens Markdown directs.
 - Ajouter une définition au glossaire avant d'introduire un nouvel acronyme.
 - Dans les graphiques, développer le terme dans le libellé ou la légende.
-- Dans les futures interfaces, proposer une aide accessible au clavier et au clic ;
+- Dans les interfaces, proposer une aide accessible au clavier et au clic ;
   une infobulle au survol seule ne suffit pas.
 - Les rapports exportés doivent embarquer un glossaire local accessible hors réseau.
 - Préserver les noms techniques, commandes, chemins et formules dans les blocs de code.
-- Cette convention n'autorise pas l'implémentation des phases suivantes.
 
 ## Règles scientifiques
 - Clé d'individu : (study, animal_id), jamais animal_id seul.

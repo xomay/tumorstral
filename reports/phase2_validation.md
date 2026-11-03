@@ -1,4 +1,4 @@
-# Phase 2 — validation et résultats observés
+# Phase 2 — vérifications et résultats observés
 
 Exécution du **3 novembre 2026**, sur le fichier réel INSPECTumours.
 Les [définitions des acronymes](../src/tumortwin/glossary.md) sont accessibles
@@ -36,7 +36,7 @@ corrigée avant le passage réussi et avant toute expérience réelle.
 
 Le bac à sable bloquait les primitives système du calcul multiprocessus
 (`Operation not permitted`). La tentative incomplète a été conservée dans
-`development_interrupted_sandbox/`, puis l'exécution autorisée hors bac à sable
+`development_interrupted_sandbox/`, puis l'exécution hors bac à sable
 a terminé le développement. Les bornes, départs, tolérances et règles de score
 du protocole ont été conservés **sans ajustement après le développement**.
 
@@ -119,7 +119,7 @@ reprises. Les faibles volumes rendent les erreurs relatives instables. L'arrêt
 du suivi peut être informatif ; les cibles manquantes ne sont pas interpolées.
 Les dates de traitement ne sont pas fournies et aucun effet causal n'est estimé.
 L'analyse exploratoire de phase 1 a déjà vu tout le jeu : la séparation actuelle
-n'est pas une validation externe aveugle, et trois études ne suffisent pas à
+n'est pas une évaluation externe aveugle, et trois études ne suffisent pas à
 établir la généralisation à une nouvelle étude.
 
 ## Accéder aux résultats complets
@@ -133,5 +133,3 @@ Pour reproduire exactement le code exécuté, utiliser le commit `88d1083`, inst
 le lock avec uv, télécharger les données puis exécuter split, develop, freeze
 et evaluate. Un autre commit crée une nouvelle empreinte d'expérience ; cela ne
 signifie pas que le précédent dossier manque ou a été écrasé.
-
-**Phase 2 réalisée. Les phases 3–5 ne sont pas engagées.**

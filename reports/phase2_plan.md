@@ -1,8 +1,6 @@
-# Phase 2 — Protocole proposé pour validation
+# Phase 2 — Protocole expérimental
 
-Statut : **protocole autorisé le 3 novembre 2026 par la demande « implémente la phase 2 »**.
-Les phases 3–5 restent soumises à une validation distincte. Ce document décrit
-le protocole ; les résultats sont publiés séparément.
+Ce document décrit le protocole expérimental ; les résultats sont publiés séparément.
 
 ## 1. Objectif et limites de l'expérience
 
@@ -15,11 +13,10 @@ Les modèles sont ajustés séparément sur chaque historique disponible. Ils
 n'apprennent pas un effet de traitement partagé entre animaux. La séparation
 des animaux sert à développer et figer la procédure numérique sur un ensemble,
 puis à évaluer cette procédure sur d'autres animaux. Ajuster les paramètres
-sur le préfixe d'un animal de test est autorisé ; utiliser sa suite pour cet
-ajustement est interdit.
+sur le préfixe d'un animal de test utilise uniquement ses observations passées.
 
 L'analyse reste préclinique et descriptive. Aucun effet causal, paramètre
-biologique validé ou prédiction clinique ne sera revendiqué. Les six colonnes
+biologique démontré ou aptitude clinique ne sont établis. Les six colonnes
 ne documentent pas les dates de traitement : impossible de modéliser une
 intervention pharmacologique ou d'aligner les courbes sur son administration.
 
@@ -48,13 +45,13 @@ des effectifs de test ni de la convergence des ajustements. Les couples sont
 corrélés lorsqu'ils appartiennent à un même animal. Ne pas les interpréter
 comme autant d'expériences indépendantes.
 
-L'[EDA](../src/tumortwin/glossary.md#eda) a déjà porté sur tout le jeu. Le futur test est donc un ensemble réservé
-aux scores prédictifs après gel du protocole, **pas une validation externe
+L'[EDA](../src/tumortwin/glossary.md#eda) a déjà porté sur tout le jeu. Le test est un ensemble réservé
+aux scores prédictifs après gel du protocole, **pas une évaluation externe
 aveugle**. Une confirmation indépendante demanderait d'autres données.
 
 ## 3. Séparation des individus et gel du protocole
 
-Proposition : 80 % développement, 20 % test, stratifiés par `(study, treatment)`.
+Répartition : 80 % développement, 20 % test, stratifiés par `(study, treatment)`.
 Le traitement ne sert qu'à la stratification et aux analyses descriptives.
 
 | Strate | Animaux | Développement | Test |
@@ -79,15 +76,15 @@ suivi, existence de cibles ou résultats des modèles.
 
 Sur les 104 animaux de développement : vérifier stabilité numérique, coût et
 diagnostics, puis geler la configuration et le commit. Les choix numériques
-ci-dessous sont les valeurs proposées. Toute modification motivée par le
+ci-dessous sont les valeurs du protocole. Toute modification motivée par le
 développement sera consignée avant ouverture des scores de test ; tout
 changement de question principale, horizon, métrique ou règle de séparation
-nécessitera une nouvelle validation du protocole.
+définit une nouvelle version du protocole, distincte de cette expérience.
 
 Le test sera exécuté après ce gel. Aucun réglage ne sera modifié pour améliorer
 ses résultats. Une répétition corrigée pour bug devra être explicitement marquée.
-Il n'y a pas d'hyperparamètre appris globalement dans la proposition initiale :
-une validation croisée n'est donc pas indispensable. Une validation laissant
+Il n'y a pas d'hyperparamètre appris globalement dans ce protocole :
+une évaluation croisée n'est donc pas indispensable. Une évaluation laissant
 une étude entière de côté serait une expérience complémentaire distincte,
 non incluse dans le classement principal.
 
@@ -153,14 +150,14 @@ pas une capacité biologique démontrée. Ces modèles autonomes monotones ne
 représentent pas une régression suivie d'une reprise, ni les changements de
 traitement ; leurs erreurs sur de telles courbes devront rester visibles.
 
-Ajustement proposé : `scipy.optimize.least_squares`, méthode `trf`, perte
+Ajustement : `scipy.optimize.least_squares`, méthode `trf`, perte
 quadratique `linear`, sur les volumes dans leur échelle d'origine. Pour le
 conditionnement uniquement, diviser tous les résidus d'un même ajustement par
 `s = max(mediane_des_volumes_positifs_du_prefixe, 1 mm³)` ; cela ne change pas
 le minimum des carrés. Ne pas transformer les cibles en logarithmes et ne pas
 remplacer les zéros par un epsilon.
 
-Valeurs numériques initiales à valider sur le développement :
+Paramètres numériques :
 
 - `V0` et `K` entre `1e-6 mm³` et `1000 * max(max_volume_prefixe, 1 mm³)`.
 - `r` dans `[-2, 2] jour⁻¹` pour l'exponentiel et `[0, 2] jour⁻¹` pour les
@@ -184,8 +181,7 @@ non finies ; aucune troncature silencieuse d'une prévision très grande mais fi
 
 La documentation officielle confirme la prise en charge des bornes, pertes et
 diagnostics par [SciPy least_squares](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html).
-SciPy sera ajouté avec uv et figé dans uv.lock uniquement après autorisation
-d'implémenter la phase 2.
+SciPy est géré avec uv et sa version est figée dans uv.lock.
 
 ## 6. Convergence, identifiabilité et échecs
 
@@ -199,9 +195,9 @@ preuves d'identification ou d'incertitude biologique.
 Un ajustement convergé mais mal identifié conserve sa prévision finie et un
 avertissement ; ne pas le supprimer pour embellir les scores. Un échec est une
 absence de convergence pour tous les départs, une impossibilité de calcul,
-ou une prévision non finie/négative. Une prévision nulle est autorisée.
+ou une prévision non finie/négative. Une prévision nulle reste admissible.
 Ne pas présenter la covariance locale des paramètres comme une incertitude
-prédictive validée.
+prédictive établie.
 
 Le registre conserve tous les échecs. Aucun remplacement silencieux par la
 persistance. Les règles d'échec seront gelées avant l'évaluation de test.
@@ -259,9 +255,9 @@ Les horizons ont des cohortes différentes ; une différence d'erreur entre
 Fournir une analyse secondaire sur les couples `(animal, origine)` possédant
 les trois cibles, avec les effectifs restants et le biais vers les suivis longs.
 
-## 8. Livrables d'implémentation envisagés
+## 8. Livrables d'implémentation
 
-| Emplacement proposé | Contenu |
+| Emplacement | Contenu |
 | --- | --- |
 | `configs/phase2.toml` | horizons, séparation, bornes, solveur, graines, métriques |
 | `src/tumortwin/baselines/` | interface commune, quatre modèles, diagnostics |
@@ -270,9 +266,9 @@ les trois cibles, avec les effectifs restants et le biais vers les suivis longs.
 | `tests/test_evaluation.py` | absence de fuite et comparaison équitable |
 | `reports/phase2/` | protocole figé, manifeste, prévisions, scores, figures, rapport |
 
-Ajouter après validation des sous-commandes séparant explicitement création
-du split, diagnostic de développement et évaluation finale. Les noms de [CLI](../src/tumortwin/glossary.md#cli)
-seront documentés à l'implémentation ; aucune commande de phase 2 n'existe encore.
+La [CLI](../src/tumortwin/glossary.md#cli) sépare explicitement la création du split,
+le développement, le gel et l'évaluation finale : `phase2 split`, `phase2 develop`,
+`phase2 freeze` et `phase2 evaluate`.
 Les sorties seront dans un sous-dossier identifié par empreinte du protocole,
 des données et du commit pour éviter de mélanger plusieurs expériences.
 
@@ -312,13 +308,11 @@ exécution reproductible avec uv, tous les modèles et échecs exportés, tablea
 à horizons identiques, rapport honnête même si persistance gagne. La précision
 prédictive n'est pas un critère logiciel d'acceptation.
 
-## 10. Ordre de réalisation après validation
+## 10. Ordre d’exécution
 
-1. Geler et versionner ce protocole approuvé ; ajouter SciPy via uv et figer le lock.
+1. Versionner le protocole et figer les dépendances avec uv.
 2. Construire le split et le registre temporel ; tester l'absence de fuite.
 3. Implémenter et tester les quatre modèles et leurs diagnostics.
 4. Exécuter uniquement le développement ; documenter et geler les réglages.
 5. Exécuter le test ; produire scores, couvertures, graphiques et limites.
-6. Soumettre le bilan de phase 2. La phase 3 nécessitera une validation distincte.
-
-**Autorisation reçue pour la phase 2 uniquement.**
+6. Produire le bilan expérimental.

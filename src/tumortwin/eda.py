@@ -178,7 +178,7 @@ Les jours fournis sont conservés, aucune date calendaire n'est inventée.
 {quality['n_irregular_animals']} animaux ont des intervalles enregistrés irréguliers ;
 {quality['n_short_histories_lt3']} ont moins de trois mesures exploitables ;
 {quality['n_unsorted_animals']} ont des lignes source non triées chronologiquement.
-Un historique de trois points n'est pas une garantie d'ajustabilité des futurs modèles.
+Un historique de trois points n'est pas une garantie d'ajustabilité d'un modèle.
 
 Les lignes brutes, valeurs originales et indicateurs sont conservés dans observations.csv.
 Les lignes signalées sont exportées dans flagged_rows.csv. Les statistiques de volume
@@ -214,17 +214,14 @@ Les barres montrent l'intervalle interquartile, pas un intervalle de confiance.
 Les effectifs varient selon la date : l'attrition peut être informative. La distribution
 globale des volumes pondère davantage les animaux mesurés plus souvent.
 Les étiquettes Drug A/B ne suffisent pas à établir une identité pharmacologique
-commune entre études. Aucune conclusion causale ni validation clinique.
+commune entre études. Aucun effet causal ni aptitude à un usage clinique n'est établi.
 Le jeu d'exemple ne garantit pas la représentativité biologique ; les causes des
 arrêts de suivi ne sont pas fournies dans ces six colonnes.
 
-## Périmètre et suite
+## Portée de l'analyse
 
 Aucun modèle n'est entraîné ou évalué. L'[EDA](glossary.md#eda) décrit toutes les données ; elle
-ne sert pas à choisir des hyperparamètres sur de futurs individus de test.
-La phase 2 devra figer une séparation par animal, des origines et horizons en
-jours comparables, puis comparer les quatre baselines sur les mêmes cibles.
-Les phases 2–5 attendent validation. Aucune image [TCIA](glossary.md#tcia) n'est utilisée en phase 1.
+ne sert pas à choisir des hyperparamètres sur les individus de test.
 """
     (reports / "phase1_report.md").write_text(report, encoding="utf-8")
     return quality
