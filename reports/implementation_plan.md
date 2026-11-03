@@ -11,6 +11,10 @@
    unités temporelles et le pipeline complet hors réseau ; exécuter sur le jeu réel.
 
 ## Phase 2 proposée, non engagée
+Le protocole détaillé à valider est dans [phase2_plan.md](phase2_plan.md).
+Il précise la séparation 104/26 animaux, les horizons exacts 3/7/14 jours,
+les ajustements, la gestion des échecs, les métriques et les critères d'acceptation.
+
 Après validation : figer une séparation par animal (et éventuellement par étude),
 définir les origines de prévision et horizons en jours réels, ajuster persistance,
 exponentiel, logistique et Gompertz avec SciPy sur les préfixes disponibles.

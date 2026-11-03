@@ -154,6 +154,9 @@ Les tableaux générés restent la source détaillée de ces résultats.
 
 ## Phase 2 proposée — à valider
 
+Voir le [protocole détaillé de phase 2](reports/phase2_plan.md), proposé le
+3 novembre 2026. Il reste à valider ; aucun modèle de phase 2 n'est implémenté.
+
 Figer les individus d'apprentissage et de test avant tout choix de réglage.
 Définir des préfixes d'observation et des horizons comparables en jours réels,
 puis ajuster avec SciPy persistance, exponentiel, logistique et Gompertz.
