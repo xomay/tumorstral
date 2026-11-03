@@ -4,6 +4,10 @@ Prototype scientifique reproductible combinant, à terme, prévision temporelle
 et modélisation mécanistique tumorale. **Seule la phase 1 est implémentée** :
 chargement INSPECTumours, contrôle qualité et analyse exploratoire.
 
+**Aide à la lecture :** les acronymes du texte sont cliquables.
+Consultez le [glossaire des acronymes](src/tumortwin/glossary.md).
+Cette convention est inscrite dans AGENTS.md pour les prochaines réalisations.
+
 ## Reproduction avec uv
 
 Depuis la racine du projet, avec [uv](https://docs.astral.sh/uv/) :
@@ -20,8 +24,8 @@ uv run pytest --junitxml=reports/tests.xml
 Dans l'environnement de développement utilisé ici, uv est installé localement :
 ajouter `export PATH="$PWD/.tools:$PATH"` avant ces commandes. Aucun usage de pip.
 `uv.lock` fixe les dépendances et `.python-version` sélectionne Python 3.14 ;
-le paquet déclare Python >=3.11. R n'est pas nécessaire : `rdata` lit le RDA.
-Les téléchargements nécessitent un accès réseau (PyPI et API GitHub) ; après
+le paquet déclare Python >=3.11. R n'est pas nécessaire : `rdata` lit le [RDA](src/tumortwin/glossary.md#rda).
+Les téléchargements nécessitent un accès réseau ([PyPI](src/tumortwin/glossary.md#pypi) et [API](src/tumortwin/glossary.md#api) GitHub) ; après
 installation et récupération, analyses et tests fonctionnent hors réseau :
 
 ```sh
@@ -30,7 +34,7 @@ uv run --offline pytest
 ```
 
 Le serveur raw GitHub n'a pas répondu dans l'environnement initial ; le
-téléchargeur utilise l'API GitHub Contents. Les restrictions réseau du bac à
+téléchargeur utilise l'[API](src/tumortwin/glossary.md#api) GitHub Contents. Les restrictions réseau du bac à
 sable ont nécessité une autorisation pour les dépendances et les données.
 
 ## Utiliser le projet sur un autre appareil
@@ -70,23 +74,23 @@ décrit exactement six colonnes :
 | day | Jour après implantation, conservé sans réindexation |
 | tumour_volume | Volume tumoral en mm³ |
 
-`download` conserve le RDA, le dictionnaire, la licence Apache 2.0 amont et un
-manifeste SHA-256 dans `data/raw/`. Il refuse d'écraser un fichier différent de
+`download` conserve le [RDA](src/tumortwin/glossary.md#rda), le dictionnaire, la licence Apache 2.0 amont et un
+manifeste [SHA-256](src/tumortwin/glossary.md#sha-256) dans `data/raw/`. Il refuse d'écraser un fichier différent de
 la révision figée. L'analyse vérifie l'empreinte si ce manifeste est présent.
 Les données brutes ne sont pas ajoutées au suivi Git.
 
-Un CSV local avec ces six noms de colonnes est aussi accepté :
+Un [CSV](src/tumortwin/glossary.md#csv) local avec ces six noms de colonnes est aussi accepté :
 
 ```sh
 uv run tumortwin eda --config configs/phase1.toml --input /chemin/example_data.csv
 ```
 
-Les identifiants CSV sont lus comme chaînes pour préserver les zéros initiaux.
-Les chaînes vides, NA, N/A, NaN, nan, NULL et null sont interprétées comme
+Les identifiants [CSV](src/tumortwin/glossary.md#csv) sont lus comme chaînes pour préserver les zéros initiaux.
+Les chaînes vides, [NA](src/tumortwin/glossary.md#na), [N/A](src/tumortwin/glossary.md#na), [NaN](src/tumortwin/glossary.md#nan), nan, [NULL](src/tumortwin/glossary.md#null) et null sont interprétées comme
 manquantes ; les valeurs originales sont gardées dans les colonnes `raw_*`.
 Les espaces périphériques sont retirés des champs normalisés.
-Les chemins du TOML sont relatifs à `project_root`, lui-même relatif au TOML.
-Les options CLI sont relatives au répertoire courant. Les répertoires de sortie
+Les chemins du [TOML](src/tumortwin/glossary.md#toml) sont relatifs à `project_root`, lui-même relatif au [TOML](src/tumortwin/glossary.md#toml).
+Les options [CLI](src/tumortwin/glossary.md#cli) sont relatives au répertoire courant. Les répertoires de sortie
 doivent être distincts du répertoire contenant l'entrée et de ses parents.
 Les fichiers produits sont remplacés lors d'une nouvelle analyse.
 
@@ -101,8 +105,10 @@ data/processed/animals.csv        effectifs, durées et intervalles par individu
 src/tumortwin/data/               téléchargement, lecture et qualité
 src/tumortwin/eda.py              tableaux, figures et rapport
 src/tumortwin/cli.py              commandes download et eda
+src/tumortwin/glossary.md         définitions des acronymes, référence commune
 tests/                           tests hors réseau sur données synthétiques
 reports/phase1_report.md          rapport généré avec quatre figures
+reports/glossary.md               copie du glossaire pour lecture hors réseau
 reports/quality.json              compteurs de qualité
 reports/provenance.json           empreinte, types sources, versions logicielles
 reports/flagged_rows.csv          lignes exclues des résumés, sans perte des originaux
@@ -117,7 +123,7 @@ reports/validation.md             résultats de validation dans cet environnemen
 
 Les répertoires baselines, timestral, spatial, coupling et evaluation sont
 réservés aux phases suivantes, sans code de modèle. `notebooks/` est facultatif ;
-la CLI suffit à reproduire toute l'analyse sans état interactif caché.
+la [CLI](src/tumortwin/glossary.md#cli) suffit à reproduire toute l'analyse sans état interactif caché.
 
 ## Résultats observés (2 novembre 2026)
 
@@ -140,16 +146,16 @@ Les tableaux générés restent la source détaillée de ces résultats.
 - Les doublons de jour ou métadonnées contradictoires sont exclus explicitement,
   jamais moyennés. Le seuil « historique court » (<3 mesures) est descriptif.
 - Une visite absente est indétectable sans calendrier de visites ; l'absence de
-  NaN n'établit pas la complétude du suivi. Les causes des arrêts ne sont pas connues.
-- Comparaisons par étude et jour réel ; IQR descriptif, sans test causal.
+  [NaN](src/tumortwin/glossary.md#nan) n'établit pas la complétude du suivi. Les causes des arrêts ne sont pas connues.
+- Comparaisons par étude et jour réel ; [IQR](src/tumortwin/glossary.md#iqr) descriptif, sans test causal.
   Les effectifs changent avec le temps et l'attrition peut être informative.
   Un libellé Drug A/B commun ne prouve pas un même médicament entre études.
 - Le jeu d'exemple et ses six colonnes ne documentent pas toute la biologie,
   les protocoles, ni la représentativité d'une population expérimentale.
 - Aucun partage apprentissage/test à ce stade : aucun modèle n'est ajusté.
   Une séparation par (study, animal_id) sera obligatoire pour la modélisation.
-  Ne pas utiliser cette EDA globale pour régler un modèle sur les futurs animaux de test.
-- Aucune donnée TCIA n'est téléchargée ; aucun suivi longitudinal CT n'est supposé.
+  Ne pas utiliser cette [EDA](src/tumortwin/glossary.md#eda) globale pour régler un modèle sur les futurs animaux de test.
+- Aucune donnée [TCIA](src/tumortwin/glossary.md#tcia) n'est téléchargée ; aucun suivi longitudinal CT n'est supposé.
   Aucune prédiction clinique validée n'est revendiquée.
 
 ## Phase 2 proposée — à valider
@@ -160,12 +166,12 @@ Voir le [protocole détaillé de phase 2](reports/phase2_plan.md), proposé le
 Figer les individus d'apprentissage et de test avant tout choix de réglage.
 Définir des préfixes d'observation et des horizons comparables en jours réels,
 puis ajuster avec SciPy persistance, exponentiel, logistique et Gompertz.
-Comparer MAE/RMSE et erreurs relatives sur cibles strictement positives,
+Comparer [MAE](src/tumortwin/glossary.md#mae)/[RMSE](src/tumortwin/glossary.md#rmse) et erreurs relatives sur cibles strictement positives,
 sur les mêmes couples origine/cible pour tous les modèles. Rapporter les
 échecs de convergence et les paramètres mal identifiables ; ne pas réutiliser
 les cibles futures comme covariables. Les historiques très courts limitent
 l'identifiabilité des modèles logistique et Gompertz.
 
-Le projet conserve exactement cinq phases : EDA, baselines, Timestral zero-shot,
-réaction-diffusion 3D, couplage. **Les phases 2–5 attendent validation.**
-L'API Timestral sera vérifiée à la phase 3, sans fine-tuning ni calibration externe.
+Le projet conserve exactement cinq phases : [EDA](src/tumortwin/glossary.md#eda), baselines, Timestral zero-shot,
+réaction-diffusion [3D](src/tumortwin/glossary.md#3d), couplage. **Les phases 2–5 attendent validation.**
+L'[API](src/tumortwin/glossary.md#api) Timestral sera vérifiée à la phase 3, sans fine-tuning ni calibration externe.

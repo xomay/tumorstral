@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.metadata
+from importlib.resources import files
 import json
 import platform
 from pathlib import Path
@@ -90,7 +91,7 @@ def make_figures(df: pd.DataFrame, animals: pd.DataFrame, folder: Path) -> None:
                 yerr=np.stack([rows["median"] - rows.q25, rows.q75 - rows["median"]]),
                 fmt="o", ms=3, capsize=2, label=treatment)
             axes[1, j].plot(rows.day, rows.n_animals, "o", label=treatment)
-        axes[0, j].set(title=study, ylabel="Médiane et IQR (mm³)", xlabel="Jour après implantation")
+        axes[0, j].set(title=study, ylabel="Médiane et intervalle interquartile (mm³)", xlabel="Jour après implantation")
         axes[1, j].set(ylabel="Animaux mesurés à cette date", xlabel="Jour après implantation")
         if axes[0, j].has_data():
             axes[0, j].legend(fontsize=8)
@@ -135,6 +136,8 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
             provenance["upstream"] = upstream
     for folder in [processed, reports]:
         folder.mkdir(parents=True, exist_ok=True)
+    glossary = files("tumortwin").joinpath("glossary.md").read_text(encoding="utf-8")
+    (reports / "glossary.md").write_text(glossary, encoding="utf-8")
     df.to_csv(processed / "observations.csv", index=False)
     animals.to_csv(processed / "animals.csv", index=False)
     quality_path = reports / "quality.json"
@@ -159,7 +162,9 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
     flags = pd.DataFrame(quality["row_flags"].items(), columns=["Indicateur (lignes)", "Effectif"])
     report = f"""# TumorTwin — Analyse exploratoire (phase 1)
 
-Source : `{source.name}` ; SHA-256 : `{provenance['sha256']}`.
+[Glossaire des acronymes](glossary.md) — définitions accessibles hors réseau.
+
+Source : `{source.name}` ; [SHA-256](glossary.md#sha-256) : `{provenance['sha256']}`.
 Les colonnes et types lus sont consignés dans `provenance.json`.
 
 {len(df)} lignes, {len(animals)} animaux (clé study + animal_id), {quality['n_studies']} études.
@@ -215,11 +220,11 @@ arrêts de suivi ne sont pas fournies dans ces six colonnes.
 
 ## Périmètre et suite
 
-Aucun modèle n'est entraîné ou évalué. L'EDA décrit toutes les données ; elle
+Aucun modèle n'est entraîné ou évalué. L'[EDA](glossary.md#eda) décrit toutes les données ; elle
 ne sert pas à choisir des hyperparamètres sur de futurs individus de test.
 La phase 2 devra figer une séparation par animal, des origines et horizons en
 jours comparables, puis comparer les quatre baselines sur les mêmes cibles.
-Les phases 2–5 attendent validation. Aucune image TCIA n'est utilisée en phase 1.
+Les phases 2–5 attendent validation. Aucune image [TCIA](glossary.md#tcia) n'est utilisée en phase 1.
 """
     (reports / "phase1_report.md").write_text(report, encoding="utf-8")
     return quality

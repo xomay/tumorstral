@@ -18,6 +18,7 @@ reports/quality.json
 reports/provenance.json
 reports/tests.xml
 reports/phase1_report.md
+reports/glossary.md
 reports/figures/
 
 # Local credentials, app metadata and editor files.

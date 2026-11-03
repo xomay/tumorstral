@@ -40,6 +40,10 @@ def test_complete_offline_pipeline_and_cli(tmp_path, sample):
     provenance = json.loads((tmp_path / "reports/provenance.json").read_text())
     assert provenance["sha256"] == sha256(source)
     report = (tmp_path / "reports/phase1_report.md").read_text()
+    assert "[EDA](glossary.md#eda)" in report
+    glossary = (tmp_path / "reports/glossary.md").read_text()
+    assert "## EDA" in glossary
+    assert "## SHA-256" in glossary
     assert "1462" not in report  # no hard-coded experimental results
     for name in ["distributions", "observation_gaps", "individual_trajectories", "treatment_comparison"]:
         assert (tmp_path / f"reports/figures/{name}.png").stat().st_size > 1000
