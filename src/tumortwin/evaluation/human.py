@@ -281,7 +281,8 @@ def run_human(config: Path, partition: str) -> Path:
     pd.DataFrame(grids).to_csv(output/"grids.csv", index=False)
     (output/"timestral_diagnostics.json").write_text(json_text(timestral_diagnostics))
     truth.to_csv(output/"targets.csv", index=False)
-    joined = point.merge(truth[["origin_id", "target_day", "target_volume", "target_status"]],
+    joined = point.merge(truth.loc[truth.target_day.notna(),
+                                  ["origin_id", "target_day", "target_volume", "target_status"]],
                          on=["origin_id", "target_day"], how="left", validate="many_to_one")
     joined.to_csv(output/"scored_predictions.csv", index=False)
     scores, individual = point_scores(joined, models)

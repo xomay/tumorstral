@@ -110,7 +110,7 @@ def test_human_baseline_pipeline_and_freeze(tmp_path):
     text = text.replace('protocol = "reports/human_protocol.md"', 'protocol = "protocol.md"')
     text = text.replace('enabled = true', 'enabled = false').replace('workers = 4', 'workers = 1')
     text = text.replace('development_patients = 20', 'development_patients = 2')
-    text = text.replace('contexts = [3, 4, 5, 6]', 'contexts = [3, 6]')
+    text = text.replace('contexts = [3, 4, 5, 6]', 'contexts = [3, 6, 8]')
     text = text.replace('rate_starts = [0.01, 0.1, 0.5]', 'rate_starts = [0.1]')
     text = text.replace('capacity_factors = [0.5, 1.0, 2.0, 10.0]', 'capacity_factors = [2.0]')
     text = text.replace('max_nfev = 2000', 'max_nfev = 40')
@@ -129,3 +129,4 @@ def test_human_baseline_pipeline_and_freeze(tmp_path):
     assert (output/"figures/patient_forecasts.png").stat().st_size > 1000
     assert "target_volume" not in pd.read_csv(output/"predictions.csv")
     assert pd.read_csv(output/"scored_predictions.csv").target_volume.notna().all()
+    assert pd.read_csv(output/"targets.csv").target_status.eq("no_followup_visit").any()
