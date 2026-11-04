@@ -1,25 +1,24 @@
-# Phase 2 — guide d'exécution
+# Utiliser les modèles de référence précliniques
 
-Le [protocole](phase2_plan.md) définit les règles scientifiques ; aucun réglage
+Le [protocole](preclinical_protocol.md) définit les règles scientifiques ; aucun réglage
 ne doit être choisi à partir des scores de test.
 
 ## Reproduire une expérience
 
 Installer les dépendances avec `uv sync --locked` et récupérer les données
 avec `uv run tumortwin download`. Le dépôt doit être propre et committé pour
-figer une expérience. La configuration est `configs/phase2.toml` ; les chemins
+figer une expérience. La configuration est `configs/baselines.toml` ; les chemins
 sont relatifs à sa racine de projet.
 
 ```sh
 export UV_CACHE_DIR="$PWD/.uv-cache"
 export MPLCONFIGDIR="$PWD/.cache/matplotlib"
-uv run --offline tumortwin phase2 split
-uv run --offline tumortwin phase2 develop
-uv run --offline tumortwin phase2 freeze
-uv run --offline tumortwin phase2 evaluate
+uv run --offline tumortwin baselines split
+uv run --offline tumortwin baselines develop
+uv run --offline tumortwin baselines freeze
+uv run --offline tumortwin baselines evaluate
 ```
 
-Dans l'environnement initial, uv est disponible sous `.tools/uv`.
 Quatre processus calculent des origines indépendantes ; la sélection des
 départs et l'ordre des exports restent déterministes. Les durées peuvent varier.
 Le traitement affiche sa progression sur la sortie d'erreur ; la sortie standard
@@ -47,7 +46,7 @@ réexécuter ce cycle avec la configuration modifiée, avant les scores de test.
 
 ## Lire les sorties
 
-Dans `reports/phase2/<empreinte>/` :
+Dans `reports/baselines/<empreinte>/` :
 
 | Fichier | Usage |
 | --- | --- |

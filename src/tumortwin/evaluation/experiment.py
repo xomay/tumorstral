@@ -66,7 +66,7 @@ def load_experiment(config_path: Path) -> tuple[dict, Path, Path, pd.DataFrame, 
     if source.is_relative_to(output):
         raise ValueError("Output directory must not contain the source data")
     if cfg["horizons"] != [3, 7, 14] or cfg["primary_horizon"] != 7 or cfg["short_histories"] != [3, 4, 5]:
-        raise ValueError("Changing approved horizons/context analyses requires a new protocol")
+        raise ValueError("This preclinical protocol requires horizons 3/7/14 and short contexts 3/4/5")
     if not 1 <= cfg["workers"] <= 32 or cfg["min_history"] < 3:
         raise ValueError("Invalid workers or context size")
     source_hash = sha256(source)

@@ -152,16 +152,16 @@ def test_miniature_pipeline_freeze_and_integrity(tmp_path):
     raw.to_csv(tmp_path/"synthetic.csv", index=False)
     (tmp_path/"protocol.md").write_text("Synthetic offline test protocol")
     (tmp_path/".gitignore").write_text("output/\n")
-    config = Path("configs/phase2.toml").read_text().replace('project_root = ".."', 'project_root = "."')
+    config = Path("configs/baselines.toml").read_text().replace('project_root = ".."', 'project_root = "."')
     config = config.replace('input = "data/raw/example_data.rda"', 'input = "synthetic.csv"')
-    config = config.replace('output = "reports/phase2"', 'output = "output"')
-    config = config.replace('protocol = "reports/phase2_plan.md"', 'protocol = "protocol.md"')
+    config = config.replace('output = "reports/baselines"', 'output = "output"')
+    config = config.replace('protocol = "docs/preclinical_protocol.md"', 'protocol = "protocol.md"')
     config = config.replace('workers = 4', 'workers = 1').replace('bootstrap_samples = 2000', 'bootstrap_samples = 10')
     config = config.replace('exponential_starts = [-0.1, 0.0, 0.1]', 'exponential_starts = [0.1]')
     config = config.replace('rate_starts = [0.01, 0.1, 0.5]', 'rate_starts = [0.1]')
     config = config.replace('capacity_factors = [0.5, 1.0, 2.0, 10.0]', 'capacity_factors = [2.0]')
     config = config.replace('max_nfev = 2000', 'max_nfev = 100')
-    path = tmp_path/"phase2.toml"
+    path = tmp_path/"baselines.toml"
     path.write_text(config)
     for args in [["init", "-b", "main"], ["add", "."],
                  ["-c", "user.name=Synthetic test", "-c", "user.email=synthetic@example.invalid",

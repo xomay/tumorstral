@@ -12,15 +12,17 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 
-# Regenerable analysis outputs (keep handwritten plans and validation notes).
+# Generated analyses (curated reference results are versioned separately).
 reports/*.csv
 reports/quality.json
 reports/provenance.json
 reports/tests.xml
 reports/phase1_report.md
+reports/exploration.md
 reports/glossary.md
 reports/figures/
 reports/phase2/
+reports/baselines/
 reports/human/
 
 # Local credentials, app metadata and editor files.

@@ -160,7 +160,7 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
     groups.to_csv(reports / "treatment_summary.csv", index=False)
     make_figures(df, animals, reports / "figures")
     flags = pd.DataFrame(quality["row_flags"].items(), columns=["Indicateur (lignes)", "Effectif"])
-    report = f"""# TumorTwin — Analyse exploratoire (phase 1)
+    report = f"""# TumorTwin — Analyse exploratoire
 
 [Glossaire des acronymes](glossary.md) — définitions accessibles hors réseau.
 
@@ -223,5 +223,5 @@ arrêts de suivi ne sont pas fournies dans ces six colonnes.
 Aucun modèle n'est entraîné ou évalué. L'[EDA](glossary.md#eda) décrit toutes les données ; elle
 ne sert pas à choisir des hyperparamètres sur les individus de test.
 """
-    (reports / "phase1_report.md").write_text(report, encoding="utf-8")
+    (reports / "exploration.md").write_text(report, encoding="utf-8")
     return quality

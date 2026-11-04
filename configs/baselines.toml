@@ -1,7 +1,7 @@
 project_root = ".."
 input = "data/raw/example_data.rda"
-output = "reports/phase2"
-protocol = "reports/phase2_plan.md"
+output = "reports/baselines"
+protocol = "docs/preclinical_protocol.md"
 seed = 20261103
 test_fraction = 0.2
 horizons = [3, 7, 14]

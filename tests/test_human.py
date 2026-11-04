@@ -107,7 +107,7 @@ def test_human_baseline_pipeline_and_freeze(tmp_path):
     text = Path("configs/human.toml").read_text().replace('project_root = ".."', 'project_root = "."')
     text = text.replace('input = "data/raw/laleh/journal.pcbi.1009822.s006.xlsx"', 'input = "synthetic.xlsx"')
     text = text.replace('output = "reports/human"', 'output = "out"')
-    text = text.replace('protocol = "reports/human_protocol.md"', 'protocol = "protocol.md"')
+    text = text.replace('protocol = "docs/human_protocol.md"', 'protocol = "protocol.md"')
     text = text.replace('enabled = true', 'enabled = false').replace('workers = 4', 'workers = 1')
     text = text.replace('development_patients = 20', 'development_patients = 2')
     text = text.replace('contexts = [3, 4, 5, 6]', 'contexts = [3, 6, 8]')

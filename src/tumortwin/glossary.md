@@ -8,14 +8,14 @@ d'erreur ci-dessous ne constituent pas des résultats de prévision.
 
 **Exploratory Data Analysis — analyse exploratoire des données.** Inspection
 des distributions, trajectoires et problèmes de qualité avant la modélisation.
-Dans TumorTwin, il s'agit de la phase 1.
+Elle précède l'ajustement et l'évaluation des prévisions.
 
 ## MAE
 
 **Mean Absolute Error — erreur absolue moyenne.** Moyenne de `abs(prévision − observation)`.
 Elle vaut zéro pour des prévisions exactes ; une valeur plus faible est meilleure.
-Pour les volumes, elle s'exprime en mm³. La phase 2 prévoit une moyenne par
-animal puis entre animaux pour donner le même poids à chacun.
+Pour les volumes, elle s'exprime en mm³. TumorTwin calcule une moyenne par
+individu puis entre individus pour donner le même poids à chacun.
 
 ## MSE
 

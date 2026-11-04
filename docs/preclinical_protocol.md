@@ -1,4 +1,4 @@
-# Phase 2 — Protocole expérimental
+# Protocole de prévision préclinique
 
 Ce document décrit le protocole expérimental ; les résultats sont publiés séparément.
 
@@ -20,11 +20,11 @@ biologique démontré ou aptitude clinique ne sont établis. Les six colonnes
 ne documentent pas les dates de traitement : impossible de modéliser une
 intervention pharmacologique ou d'aligner les courbes sur son administration.
 
-## 2. Données et faisabilité déjà vérifiées
+## 2. Données et horizons disponibles
 
-Conserver le [RDA](../src/tumortwin/glossary.md#rda) et sa révision amont de phase 1 ; vérifier son [SHA-256](../src/tumortwin/glossary.md#sha-256) et
+Conserver le [RDA](../src/tumortwin/glossary.md#rda) et sa révision source ; vérifier son [SHA-256](../src/tumortwin/glossary.md#sha-256) et
 la provenance du traitement avant chaque exécution. Entrée : observations
-avec valeurs originales, jours réels et indicateurs de qualité de phase 1.
+avec valeurs originales, jours réels et indicateurs de qualité.
 Clé individuelle : `(study, animal_id)` ; unités : mm³ et jours.
 
 Le jeu contient 130 animaux et 1 462 mesures ; tous les historiques sont
@@ -70,7 +70,7 @@ Le traitement ne sert qu'à la stratification et aux analyses descriptives.
 Trier les clés de chaque strate par [SHA-256](../src/tumortwin/glossary.md#sha-256) d'une sérialisation [JSON](../src/tumortwin/glossary.md#json) canonique
 `[20261103, study, animal_id]`, avec identifiants sous forme de chaînes ; prendre
 les premiers 20 % pour le test. Cette règle évite une dépendance au générateur
-aléatoire d'une bibliothèque. Les affectations seront exportées dans un
+aléatoire d'une bibliothèque. Les affectations sont exportées dans un
 manifeste unique et immuable. Ne jamais rééquilibrer selon volumes, durée du
 suivi, existence de cibles ou résultats des modèles.
 
@@ -81,8 +81,8 @@ développement sera consignée avant ouverture des scores de test ; tout
 changement de question principale, horizon, métrique ou règle de séparation
 définit une nouvelle version du protocole, distincte de cette expérience.
 
-Le test sera exécuté après ce gel. Aucun réglage ne sera modifié pour améliorer
-ses résultats. Une répétition corrigée pour bug devra être explicitement marquée.
+Le test est exécuté après ce gel. Aucun réglage n'est modifié pour améliorer
+ses résultats. Une répétition corrigée pour bug est explicitement marquée.
 Il n'y a pas d'hyperparamètre appris globalement dans ce protocole :
 une évaluation croisée n'est donc pas indispensable. Une évaluation laissant
 une étude entière de côté serait une expérience complémentaire distincte,
@@ -102,13 +102,13 @@ non incluse dans le classement principal.
    demandé. Aucune visite la plus proche, tolérance, interpolation ou extrapolation
    de la cible. Les couples sans cible restent dans le journal avec leur motif.
 
-Dans l'implémentation, le registre des prévisions et celui des cibles seront
+Le registre des prévisions et celui des cibles sont
 distincts ; la jonction pour calculer les erreurs intervient après prévision.
-Chaque ligne conservera `t0`, `target_day`, `horizon_days`, taille et durée du
+Chaque ligne conserve `t0`, `target_day`, `horizon_days`, taille et durée du
 préfixe, lignes source, modèle, paramètres, prévision et statut.
 
-La qualité de phase 1 contient un indicateur de conflit de métadonnées calculé
-sur toute la trajectoire. Il ne devra pas sélectionner rétrospectivement les
+Le rapport de qualité contient un indicateur de conflit de métadonnées calculé
+sur toute la trajectoire. Il ne doit pas sélectionner rétrospectivement les
 préfixes : reconstruire les contrôles de contexte avec les seules lignes
 antérieures à l'origine. Un doublon contemporain reste signalé et inutilisable ;
 un conflit de métadonnées dans le préfixe rend ce préfixe inéligible. Le contrôle
@@ -125,7 +125,7 @@ Analyse secondaire des historiques courts : utiliser exactement les **3, 4
 ou 5 premières mesures exploitables**, une origine par longueur et par animal,
 avec les mêmes horizons exacts. Les quatre modèles utilisent les mêmes
 préfixes ; rapporter pour chaque longueur les effectifs et échecs. Cette analyse
-ne sera pas mélangée aux scores principaux et ne sélectionnera pas les réglages.
+n'est pas mélangée aux scores principaux et ne sélectionne pas les réglages.
 Pour distinguer autant que possible longueur et composition de cohorte, fournir
 aussi les comparaisons sur les animaux ayant une cible pour toutes les longueurs
 comparées, en signalant qu'il s'agit d'origines calendaires différentes.
@@ -148,7 +148,7 @@ Gompertz, `r >= 0`, `V0 > 0` et `K > 0` ; permettre `K < V0` représente une
 décroissance vers une limite positive. `K` est une asymptote mathématique,
 pas une capacité biologique démontrée. Ces modèles autonomes monotones ne
 représentent pas une régression suivie d'une reprise, ni les changements de
-traitement ; leurs erreurs sur de telles courbes devront rester visibles.
+traitement ; leurs erreurs sur de telles courbes restent visibles.
 
 Ajustement : `scipy.optimize.least_squares`, méthode `trf`, perte
 quadratique `linear`, sur les volumes dans leur échelle d'origine. Pour le
@@ -162,7 +162,7 @@ Paramètres numériques :
 - `V0` et `K` entre `1e-6 mm³` et `1000 * max(max_volume_prefixe, 1 mm³)`.
 - `r` dans `[-2, 2] jour⁻¹` pour l'exponentiel et `[0, 2] jour⁻¹` pour les
   deux autres modèles. Ces bornes sont des garde-fous numériques, pas des
-  connaissances physiologiques ; leur influence devra être rapportée.
+  connaissances physiologiques ; leur influence est rapportée.
 - Initialisations déterministes : `V0` initialisé au premier volume positif
   du préfixe ; exponentiel avec `r` initial dans `{-0.1, 0, 0.1}` ; modèles à
   asymptote avec `r` dans `{0.01, 0.1, 0.5}` et `K` dans
@@ -173,9 +173,9 @@ Paramètres numériques :
 - Maximum `2000` évaluations par départ ; tolérances `ftol`, `xtol`, `gtol`
   à `1e-8`. Journaliser version SciPy, durée et nombre d'évaluations.
 
-Les zéros restent scorables. Un préfixe entièrement nul donnera persistance
+Les zéros restent scorables. Un préfixe entièrement nul donne persistance
 nulle et un statut explicite d'ajustement mécanistique non identifiable ;
-aucune fausse estimation de `K` ou `r` ne sera produite.
+aucune estimation de `K` ou `r` n'est produite.
 Calculer les formules de façon stable, avec détection d'overflow et de valeurs
 non finies ; aucune troncature silencieuse d'une prévision très grande mais finie.
 
@@ -200,7 +200,7 @@ Ne pas présenter la covariance locale des paramètres comme une incertitude
 prédictive établie.
 
 Le registre conserve tous les échecs. Aucun remplacement silencieux par la
-persistance. Les règles d'échec seront gelées avant l'évaluation de test.
+persistance. Les règles d'échec sont gelées avant l'évaluation de test.
 
 ## 7. Métriques, comparaison équitable et incertitude
 
@@ -255,28 +255,28 @@ Les horizons ont des cohortes différentes ; une différence d'erreur entre
 Fournir une analyse secondaire sur les couples `(animal, origine)` possédant
 les trois cibles, avec les effectifs restants et le biais vers les suivis longs.
 
-## 8. Livrables d'implémentation
+## 8. Code et sorties
 
 | Emplacement | Contenu |
 | --- | --- |
-| `configs/phase2.toml` | horizons, séparation, bornes, solveur, graines, métriques |
+| `configs/baselines.toml` | horizons, séparation, bornes, solveur, graines, métriques |
 | `src/tumortwin/baselines/` | interface commune, quatre modèles, diagnostics |
 | `src/tumortwin/evaluation/` | manifeste d'animaux, origines, scoring et bootstrap |
 | `tests/test_baselines.py` | formules, ajustements synthétiques et échecs |
 | `tests/test_evaluation.py` | absence de fuite et comparaison équitable |
-| `reports/phase2/` | protocole figé, manifeste, prévisions, scores, figures, rapport |
+| `reports/baselines/` | protocole figé, manifeste, prévisions, scores, figures, rapport |
 
 La [CLI](../src/tumortwin/glossary.md#cli) sépare explicitement la création du split,
-le développement, le gel et l'évaluation finale : `phase2 split`, `phase2 develop`,
-`phase2 freeze` et `phase2 evaluate`.
-Les sorties seront dans un sous-dossier identifié par empreinte du protocole,
+le développement, le gel et l'évaluation finale : `baselines split`, `baselines develop`,
+`baselines freeze` et `baselines evaluate`.
+Les sorties sont dans un sous-dossier identifié par empreinte du protocole,
 des données et du commit pour éviter de mélanger plusieurs expériences.
 
 Exports minimaux : split, origines (y compris sans cible), ajustements et
 diagnostics, prévisions avant jonction des cibles, scores par animal/horizon,
 résumés avec couvertures, versions logicielles et configuration finale.
-Les sorties générées resteront ignorées par Git ; code, protocole et configuration
-seront versionnés, sans modifier les fichiers bruts ou résultats de phase 1.
+Les sorties générées restent ignorées par Git ; code, protocole et configuration
+sont versionnés, sans modifier les fichiers bruts ou les résultats exploratoires.
 
 Figures : scores par horizon avec effectifs ; différences appariées à
 persistance ; erreurs selon longueur/durée du contexte ; taux d'échec et
@@ -301,7 +301,7 @@ Tests hors réseau, données synthétiques explicitement identifiées :
 6. Métriques vérifiées sur exemples calculables à la main, pondération par
    animal, support commun identique, dénominateurs nuls et replis explicites.
 7. Bootstrap groupé et apparié reproductible ; aucune écriture dans les bruts ;
-   pipeline miniature de bout en bout et non-régression de tous les tests phase 1.
+   pipeline miniature de bout en bout et non-régression des contrôles de données.
 
 Acceptation : tests pertinents réussis, manifestes et provenance vérifiés,
 exécution reproductible avec uv, tous les modèles et échecs exportés, tableaux
@@ -312,7 +312,7 @@ prédictive n'est pas un critère logiciel d'acceptation.
 
 1. Versionner le protocole et figer les dépendances avec uv.
 2. Construire le split et le registre temporel ; tester l'absence de fuite.
-3. Implémenter et tester les quatre modèles et leurs diagnostics.
+3. Vérifier les quatre modèles et leurs diagnostics avec les tests hors réseau.
 4. Exécuter uniquement le développement ; documenter et geler les réglages.
 5. Exécuter le test ; produire scores, couvertures, graphiques et limites.
 6. Produire le bilan expérimental.

@@ -1,4 +1,4 @@
-# Phase 2 — vérifications et résultats observés
+# Résultats de référence — INSPECTumours
 
 Exécution du **3 novembre 2026**, sur le fichier réel INSPECTumours.
 Les [définitions des acronymes](../src/tumortwin/glossary.md) sont accessibles
@@ -12,7 +12,7 @@ depuis les liens ci-dessous. Aucun résultat synthétique n'entre dans ce bilan.
   `4f9f55575cf552b2066c4432db295e8c6070c30e2e5a323cf1ea5cb290f79a59`.
 - Python 3.14.4 ; SciPy 1.18.1 ; NumPy 2.5.4 ; Pandas 3.1.0 ; Matplotlib 3.11.2.
 - Protocole, configuration, code, environnement, split et exemples identifiés
-  dans les manifestes de l'expérience. Voir la [provenance de cette synthèse](phase2_review/provenance.json).
+  dans les manifestes de l'expérience. Voir la [provenance de cette synthèse](../reports/phase2_review/provenance.json).
 
 La séparation comporte **104 animaux de développement et 26 de test**, sans
 chevauchement, stratifiés par étude et traitement. Le développement a évalué
@@ -23,26 +23,19 @@ trois horizons exacts. Les origines sans cible restent dans le registre.
 
 ## Vérifications effectuées
 
-**51 tests réussis**, dont les 24 tests de phase 1. Les nouvelles vérifications
+L'expérience de référence est couverte par **51 tests hors réseau**. Les contrôles
 couvrent les formules et dérivées analytiques, croissance/décroissance,
 constantes, zéros, débordements, échecs du solveur, séparation reproductible,
 cibles exactes, conflits futurs de métadonnées, absence de fuite temporelle,
 pondération par animal, support commun, replis explicites, bootstrap apparié
 et pipeline miniature avec gel et vérification des empreintes.
 
-Le premier passage de la nouvelle suite avait trois échecs dus à une colonne
-`model` omise dans une fixture synthétique de métriques. Cette fixture a été
-corrigée avant le passage réussi et avant toute expérience réelle.
-
-Le bac à sable bloquait les primitives système du calcul multiprocessus
-(`Operation not permitted`). La tentative incomplète a été conservée dans
-`development_interrupted_sandbox/`, puis l'exécution hors bac à sable
-a terminé le développement. Les bornes, départs, tolérances et règles de score
-du protocole ont été conservés **sans ajustement après le développement**.
+Les bornes, départs, tolérances et règles de score du protocole ont été
+conservés **sans ajustement après le développement**.
 
 Le marqueur de gel a été créé après achèvement du développement et avant le test.
 L'intégrité des 68 artefacts de chaque partition a été vérifiée après exécution.
-Les données brutes et les sorties de phase 1 n'ont pas été modifiées.
+Les données brutes et les sorties de l'analyse exploratoire n'ont pas été modifiées.
 
 ## Critère principal : sept jours
 
@@ -69,7 +62,7 @@ Les intervalles des différences à persistance pour exponentiel et logistique
 incluent zéro. Les très grandes erreurs quadratiques de ces deux modèles révèlent
 des extrapolations extrêmes que leur seule erreur absolue moyenne résume mal.
 
-![Bilan de test](phase2_review/test_summary.png)
+![Bilan de test](../reports/phase2_review/test_summary.png)
 
 À gauche : erreur à sept jours avec intervalles exploratoires de sa moyenne,
 calculés par tirages d'animaux. Les intervalles de **différence appariée** sont
@@ -118,16 +111,17 @@ Les modèles sont monotones et ne représentent pas les régressions suivies de
 reprises. Les faibles volumes rendent les erreurs relatives instables. L'arrêt
 du suivi peut être informatif ; les cibles manquantes ne sont pas interpolées.
 Les dates de traitement ne sont pas fournies et aucun effet causal n'est estimé.
-L'analyse exploratoire de phase 1 a déjà vu tout le jeu : la séparation actuelle
+L'analyse exploratoire a porté sur tout le jeu : la séparation actuelle
 n'est pas une évaluation externe aveugle, et trois études ne suffisent pas à
 établir la généralisation à une nouvelle étude.
 
 ## Accéder aux résultats complets
 
-Le [guide](phase2_implementation.md) décrit les commandes et tous les exports.
-Les sorties complètes restent dans `reports/phase2/758339430817f3bc2acb/` sur
-la machine d'exécution. La synthèse et sa figure sont versionnées pour lecture
-sur GitHub ; les volumineux exports régénérables restent ignorés par Git.
+Le [guide](preclinical_usage.md) décrit les commandes et tous les exports.
+La synthèse et sa figure sont versionnées pour lecture sur GitHub ; les
+exports complets sont régénérables et restent ignorés par Git. L'identifiant
+`758339430817f3bc2acb` et les empreintes de la synthèse désignent l'expérience
+de référence ; les exécutions courantes écrivent sous `reports/baselines/`.
 
 Pour reproduire exactement le code exécuté, utiliser le commit `88d1083`, installer
 le lock avec uv, télécharger les données puis exécuter split, develop, freeze

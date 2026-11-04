@@ -3,7 +3,7 @@
 Expérience exécutée le 4 novembre 2026, identifiant `d1acaeaea2b0e3ceb2b0`,
 code au commit `88f21c255c7a51bd31ee0d42622a66641bcb9fb5`. Le
 [protocole](human_protocol.md) précise les décisions scientifiques ; la
-[provenance de cette synthèse](human_review/provenance.json) contient les
+[provenance de cette synthèse](../reports/human_review/provenance.json) contient les
 empreintes et les scores exportés. Python 3.14.4, PyTorch 2.15.0+cpu et
 Timestral 1.0.0 sont utilisés avec les dépendances figées dans uv.lock.
 
@@ -43,7 +43,7 @@ prévision sur ces mêmes 91 couples. Le délai réel est variable : médiane
 | Gompertz | 9 288,10 | 28 057,36 |
 | Timestral, médiane | 8 524,28 | 25 987,68 |
 
-![Erreur à la prochaine visite](human_review/primary_errors.png)
+![Erreur à la prochaine visite](../reports/human_review/primary_errors.png)
 
 **Timestral n'améliore pas la précision ponctuelle par rapport à persistance
 sur ce protocole.** Sa différence d'erreur absolue moyenne à persistance vaut
@@ -62,7 +62,7 @@ Aucun intervalle artificiel n'est attribué aux quatre modèles déterministes.
 | 80 %, quantiles 10–90 % | 82,42 % | 44 888,43 |
 | 90 %, quantiles 5–95 % | 95,60 % | 150 389,70 |
 
-![Couverture et largeur](human_review/interval_diagnostics.png)
+![Couverture et largeur](../reports/human_review/interval_diagnostics.png)
 
 Les intervalles sont larges. Environ 15,23 % des quantiles du critère principal
 sont négatifs, ainsi que huit médianes sur 91. Ces valeurs sont numériquement
@@ -72,7 +72,7 @@ ne doivent donc pas être assimilés à des bornes biologiquement admissibles.
 
 ## Prévisions individuelles face aux observations
 
-![Passé, vérités et prévisions](human_review/patient_forecasts.png)
+![Passé, vérités et prévisions](../reports/human_review/patient_forecasts.png)
 
 Les points noirs pleins représentent le passé, les points creux les observations
 ultérieures et le trait vertical l'origine. Les bandes sont les intervalles bruts
@@ -82,12 +82,12 @@ disposent d'une origine principale après six mesures ; les autres ne sont pas
 remplacés selon leurs erreurs. Les bandes larges peuvent comprimer visuellement
 la courbe centrale : le graphique de concordance complète cette lecture.
 
-![Prévisions et vérités, mêmes couples](human_review/truth_vs_prediction.png)
+![Prévisions et vérités, mêmes couples](../reports/human_review/truth_vs_prediction.png)
 
 La diagonale signifie égalité entre prévision et mesure. Les figures regroupent
 les trois visites suivant l'origine principale, sur leur support commun.
 
-![Erreurs par visite suivante](human_review/errors_by_horizon.png)
+![Erreurs par visite suivante](../reports/human_review/errors_by_horizon.png)
 
 Les fichiers détaillés contiennent aussi les contextes de trois, quatre et cinq
 mesures. À la prochaine visite, le support commun représente respectivement
@@ -98,15 +98,11 @@ les cohortes changent avec le suivi disponible.
 ## Exécution et contrôles
 
 **91 tests hors réseau réussissent**, y compris les tests précliniques existants.
-Les ajouts vérifient les unités, censures, empreintes, séparation par patient,
+Les tests couvrent les unités, censures, empreintes, séparation par patient,
 absence de fuite, cibles exactes, normalisation du seul préfixe, grilles masquées,
 21 niveaux de quantiles, métriques calculées à la main et rapports avec vérité.
 Le paquet source et la distribution Python se construisent correctement.
 
-La première tentative du pilote a détecté une jonction non unique sur les
-dates vides de plusieurs visites futures absentes. La jonction a été corrigée,
-un cas de régression a été ajouté au test de bout en bout, puis le pilote a été
-réexécuté avant toute évaluation de test. Le dossier incomplet est conservé.
 Les réglages numériques n'ont pas été modifiés à partir des erreurs de test.
 
 Le pilote terminé contient 41 origines ; le test en contient **580** pour les
@@ -126,7 +122,7 @@ Les empreintes du gel et des artefacts terminés sont dans la provenance de synt
 ## Reproduction
 
 Voir les commandes `human` dans le [README](../README.md) et la configuration
-`configs/human.toml`. `phase3` est un alias de la même chaîne. Les rapports
+`configs/human.toml`. Les rapports
 complets se trouvent localement sous `reports/human/d1acaeaea2b0e3ceb2b0/`.
 Les données brutes, poids et sorties détaillées restent ignorés par Git ; cette
 synthèse et ses figures sont versionnées pour une lecture directe sur GitHub.

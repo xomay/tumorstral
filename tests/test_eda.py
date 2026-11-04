@@ -23,7 +23,7 @@ def test_complete_offline_pipeline_and_cli(tmp_path, sample):
     source = tmp_path / "synthetic.csv"
     sample.to_csv(source, index=False)
     before = source.read_bytes()
-    config = tmp_path / "phase1.toml"
+    config = tmp_path / "exploration.toml"
     config.write_text('project_root = "."\ninput = "synthetic.csv"\n'
                       'processed = "processed"\nreports = "reports"\n')
     result = subprocess.run([sys.executable, "-m", "tumortwin.cli", "eda",
@@ -39,7 +39,7 @@ def test_complete_offline_pipeline_and_cli(tmp_path, sample):
     assert processed.analysis_eligible.sum() == 6
     provenance = json.loads((tmp_path / "reports/provenance.json").read_text())
     assert provenance["sha256"] == sha256(source)
-    report = (tmp_path / "reports/phase1_report.md").read_text()
+    report = (tmp_path / "reports/exploration.md").read_text()
     assert "[EDA](glossary.md#eda)" in report
     glossary = (tmp_path / "reports/glossary.md").read_text()
     assert "## EDA" in glossary

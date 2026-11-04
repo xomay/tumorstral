@@ -5,9 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "tumortwin"
 version = "0.1.0"
-description = "Reproducible exploratory analysis of longitudinal preclinical tumour data"
+description = "Reproducible tumour growth forecasting with mechanistic baselines and zero-shot Timestral"
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+keywords = ["tumour-growth", "forecasting", "timestral", "reproducible-research"]
 dependencies = [
     "numpy>=2.1",
     "pandas>=2.2",
@@ -22,6 +25,11 @@ dev = ["pytest>=8.3"]
 
 [project.scripts]
 tumortwin = "tumortwin.cli:main"
+
+[project.urls]
+Repository = "https://github.com/xomay/tumortwin"
+Documentation = "https://github.com/xomay/tumortwin#readme"
+Issues = "https://github.com/xomay/tumortwin/issues"
 
 [project.optional-dependencies]
 timestral = [

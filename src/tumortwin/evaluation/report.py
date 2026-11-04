@@ -139,7 +139,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
     table = table[["Horizon (jours)", "Modèle", "Animaux", "Couples",
                    "Erreur absolue (mm³)", "Erreur quadratique (mm³)"]].round(3)
     relative_glossary = "../glossary.md"
-    report = f"""# TumorTwin — Phase 2 : {partition}
+    report = f"""# TumorTwin — Modèles de référence : {partition}
 
 [Glossaire local]({relative_glossary}) · [Protocole figé](../protocol.md) · [Provenance](../provenance.json)
 
@@ -208,7 +208,7 @@ fragiles. Les volumes proches de zéro rendent les erreurs relatives instables ;
 elles sont secondaires et ne sont calculées que pour les cibles strictement positives.
 Les pourcentages sont des fractions dans les exports (multiplier par 100 pour les lire).
 Les modèles monotones ne représentent pas toutes les réponses ou reprises sous traitement.
-L'analyse exploratoire de phase 1 a déjà vu tout le jeu : ce test n'est pas une
+L'analyse exploratoire a déjà vu tout le jeu : ce test n'est pas une
 évaluation externe aveugle. Aucun effet causal ou usage clinique n'est démontré.
 """
     (folder/"report.md").write_text(report, encoding="utf-8")

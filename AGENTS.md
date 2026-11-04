@@ -3,7 +3,8 @@
 ## Périmètre
 Le projet couvre l'analyse exploratoire, les modèles individuels de référence
 et les prévisions zero-shot Timestral sur les données humaines Laleh.
-Suivre le protocole `reports/phase2_plan.md`. Ne pas ajouter de fine-tuning, calibration externe,
+Suivre les protocoles `docs/preclinical_protocol.md` et `docs/human_protocol.md`.
+Ne pas ajouter de fine-tuning, calibration externe,
 serveur [MCP](src/tumortwin/glossary.md#mcp) ni interprétation clinique.
 
 ## Conventions
@@ -42,12 +43,14 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
 - Ne pas inventer de données ni de résultats. Documenter les limites biologiques.
 - Les images [TCIA](src/tumortwin/glossary.md#tcia) ne constituent pas des trajectoires sans suivi démontré.
 
-## Commandes (uv ou .tools/uv dans cet environnement)
+## Commandes
 `uv sync --locked`
 `uv run pytest`
 `uv run tumortwin download`
-`uv run tumortwin eda --config configs/phase1.toml`
-`uv run tumortwin phase2 split`
-`uv run tumortwin phase2 develop`
-`uv run tumortwin phase2 freeze`
-`uv run tumortwin phase2 evaluate`
+`uv run tumortwin eda --config configs/exploration.toml`
+`uv run tumortwin baselines split`
+`uv run tumortwin baselines develop`
+`uv run tumortwin baselines freeze`
+`uv run tumortwin baselines evaluate`
+`uv sync --locked --extra timestral`
+`uv run --extra timestral tumortwin human evaluate`

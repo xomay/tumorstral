@@ -1,208 +1,61 @@
 # TumorTwin
 
-Prototype scientifique reproductible de prévision temporelle et de modélisation
-mathématique tumorale. **Les phases 1 et 2 sont implémentées** :
-analyse exploratoire et comparaison de quatre modèles individuels de référence.
+**Reproducible tumour growth forecasting from longitudinal measurements.**
 
-Les trajectoires humaines de Laleh et Timestral-5M zero-shot sont également
-disponibles, avec prévisions probabilistes et graphiques face aux observations.
+TumorTwin compares individual growth models with zero-shot Timestral forecasts
+on preclinical and human tumour trajectories. It combines data quality checks,
+patient-level holdouts, probabilistic evaluation and plots of predictions against
+observations in a Python package with a reproducible command-line interface.
 
-**Aide à la lecture :** les acronymes du texte sont cliquables.
-Consultez le [glossaire des acronymes](src/tumortwin/glossary.md).
-Cette convention est inscrite dans AGENTS.md pour les prochaines réalisations.
+[Getting started](#getting-started) · [Human trajectories](#human-trajectories) ·
+[Documentation](docs/README.md) · [Contributing](CONTRIBUTING.md) ·
+[Glossary](src/tumortwin/glossary.md)
 
-## Reproduction avec uv
+## Features
 
-Depuis la racine du projet, avec [uv](https://docs.astral.sh/uv/) :
+- **Data quality:** preserve original rows, missing values, censored readings,
+  duplicate dates and source checksums.
+- **Growth models:** persistence, exponential, logistic and Gompertz, fitted
+  separately to each available history using SciPy.
+- **Probabilistic forecasts:** optional Timestral-5M with frozen weights,
+  21 quantiles and an explicit sparse daily observation grid.
+- **Comparable evaluation:** common forecast targets, errors weighted equally
+  by individual, and paired resampling of individuals.
+- **Readable results:** forecast/truth plots, prediction intervals, error
+  summaries, coverage diagnostics and a local glossary in exported reports.
 
-```sh
-export UV_CACHE_DIR="$PWD/.uv-cache"
-export MPLCONFIGDIR="$PWD/.cache/matplotlib"
-uv sync --locked
-uv run tumortwin download
-uv run tumortwin eda --config configs/phase1.toml
-uv run pytest --junitxml=reports/tests.xml
-```
+This is research software. Clinical performance and suitability for treatment
+decisions have not been established.
 
-Dans l'environnement de développement utilisé ici, uv est installé localement :
-ajouter `export PATH="$PWD/.tools:$PATH"` avant ces commandes. Aucun usage de pip.
-`uv.lock` fixe les dépendances et `.python-version` sélectionne Python 3.14 ;
-le paquet déclare Python >=3.11. R n'est pas nécessaire : `rdata` lit le [RDA](src/tumortwin/glossary.md#rda).
-Les téléchargements nécessitent un accès réseau ([PyPI](src/tumortwin/glossary.md#pypi) et [API](src/tumortwin/glossary.md#api) GitHub) ; après
-installation et récupération, analyses et tests fonctionnent hors réseau :
+## Getting started
 
-```sh
-uv run --offline tumortwin eda --config configs/phase1.toml
-uv run --offline pytest
-```
-
-Le serveur raw GitHub n'a pas répondu dans l'environnement initial ; le
-téléchargeur utilise l'[API](src/tumortwin/glossary.md#api) GitHub Contents.
-
-## Utiliser le projet sur un autre appareil
-
-Le dépôt distant est disponible sur [GitHub : xomay/tumortwin](https://github.com/xomay/tumortwin), en accès privé.
-Avec Git et uv installés et votre compte GitHub authentifié :
+Install [uv](https://docs.astral.sh/uv/) and Git, then clone the repository:
 
 ```sh
 git clone https://github.com/xomay/tumortwin.git
 cd tumortwin
 uv sync --locked
+uv run tumortwin --help
+```
+
+The package supports Python 3.11 or newer. The checkout selects Python 3.14;
+`uv.lock` records dependency versions. R is not required to read the example data.
+
+Download and explore the preclinical example:
+
+```sh
 uv run tumortwin download
-uv run tumortwin eda --config configs/phase1.toml
-uv run pytest
+uv run tumortwin eda
 ```
 
-Pour récupérer les changements sur un autre appareil : `git pull --ff-only`.
-Pour publier votre travail : créer une branche, committer les modifications,
-puis `git push -u origin NOM_DE_BRANCHE`.
-L'environnement `.venv`, les caches, les données brutes et traitées, les figures
-et rapports générés restent locaux et sont régénérés avec les commandes ci-dessus.
-Les fichiers de configuration locaux et secrets sont exclus par `.gitignore`.
+Open `reports/exploration.md` for quality checks, trajectory statistics and figures.
+A local [CSV](src/tumortwin/glossary.md#csv) with the documented schema can be supplied
+with `uv run tumortwin eda --input /path/to/data.csv`.
 
-## Données et schéma vérifié
+## Human trajectories
 
-Source : [INSPECTumours, AstraZeneca](https://github.com/AstraZeneca/INSPECTumours),
-révision `eb41f4f80595b7185cf925a3195d35e1e3b34394`, objet `example_data` du fichier
-`data/example_data.rda`. Le [dictionnaire officiel](https://github.com/AstraZeneca/INSPECTumours/blob/eb41f4f80595b7185cf925a3195d35e1e3b34394/man/example_data.Rd)
-décrit exactement six colonnes :
-
-| Colonne | Interprétation |
-| --- | --- |
-| study | Identifiant de l'étude |
-| group | Groupe expérimental |
-| treatment | Libellé du traitement |
-| animal_id | Identifiant animal, combiné avec study |
-| day | Jour après implantation, conservé sans réindexation |
-| tumour_volume | Volume tumoral en mm³ |
-
-`download` conserve le [RDA](src/tumortwin/glossary.md#rda), le dictionnaire, la licence Apache 2.0 amont et un
-manifeste [SHA-256](src/tumortwin/glossary.md#sha-256) dans `data/raw/`. Il refuse d'écraser un fichier différent de
-la révision figée. L'analyse vérifie l'empreinte si ce manifeste est présent.
-Les données brutes ne sont pas ajoutées au suivi Git.
-
-Un [CSV](src/tumortwin/glossary.md#csv) local avec ces six noms de colonnes est aussi accepté :
-
-```sh
-uv run tumortwin eda --config configs/phase1.toml --input /chemin/example_data.csv
-```
-
-Les identifiants [CSV](src/tumortwin/glossary.md#csv) sont lus comme chaînes pour préserver les zéros initiaux.
-Les chaînes vides, [NA](src/tumortwin/glossary.md#na), [N/A](src/tumortwin/glossary.md#na), [NaN](src/tumortwin/glossary.md#nan), nan, [NULL](src/tumortwin/glossary.md#null) et null sont interprétées comme
-manquantes ; les valeurs originales sont gardées dans les colonnes `raw_*`.
-Les espaces périphériques sont retirés des champs normalisés.
-Les chemins du [TOML](src/tumortwin/glossary.md#toml) sont relatifs à `project_root`, lui-même relatif au [TOML](src/tumortwin/glossary.md#toml).
-Les options [CLI](src/tumortwin/glossary.md#cli) sont relatives au répertoire courant. Les répertoires de sortie
-doivent être distincts du répertoire contenant l'entrée et de ses parents.
-Les fichiers produits sont remplacés lors d'une nouvelle analyse.
-
-## Fichiers et sorties
-
-```text
-AGENTS.md                         conventions et règles scientifiques
-configs/phase1.toml                chemins de l'analyse
-data/raw/                         RDA, dictionnaire, licence, provenance
-data/processed/observations.csv   toutes les lignes, valeurs brutes et indicateurs
-data/processed/animals.csv        effectifs, durées et intervalles par individu
-src/tumortwin/data/               téléchargement, lecture et qualité
-src/tumortwin/eda.py              tableaux, figures et rapport
-src/tumortwin/cli.py              commandes download et eda
-src/tumortwin/glossary.md         définitions des acronymes, référence commune
-tests/                           tests hors réseau sur données synthétiques
-reports/phase1_report.md          rapport généré avec quatre figures
-reports/glossary.md               copie du glossaire pour lecture hors réseau
-reports/quality.json              compteurs de qualité
-reports/provenance.json           empreinte, types sources, versions logicielles
-reports/flagged_rows.csv          lignes exclues des résumés, sans perte des originaux
-reports/trajectory_statistics.csv statistiques des trajectoires
-reports/volume_statistics.csv     distribution des volumes exploitables
-reports/treatment_summary.csv     résumé par étude et traitement
-reports/treatment_by_day.csv      moyenne, médiane, écart-type, IQR et effectifs
-reports/figures/                  distributions, intervalles, courbes, comparaisons
-reports/implementation_plan.md    organisation des analyses
-reports/validation.md             vérifications et résultats de l'analyse exploratoire
-```
-
-Les répertoires baselines et evaluation contiennent la phase 2. `notebooks/` est facultatif ;
-la [CLI](src/tumortwin/glossary.md#cli) suffit à reproduire toute l'analyse sans état interactif caché.
-
-## Résultats observés (2 novembre 2026)
-
-L'analyse du fichier réellement téléchargé donne **1 462 lignes, 130 animaux,
-3 études**. Chaque animal possède 5 à 28 mesures (médiane 10). Le suivi couvre
-9 à 71 jours (médiane 21). Les volumes vont de 0,5233 à 3 441 mm³
-(médiane 143,5143 mm³).
-
-Aucune valeur manquante explicite, aucun volume négatif, aucune valeur non
-numérique ou infinie, aucun doublon animal-jour ni conflit de métadonnées n'a
-été détecté. **Les 130 historiques sont irréguliers** ; les intervalles
-enregistrés vont de 2 à 7 jours. Aucun historique n'a moins de trois mesures.
-Les tableaux générés restent la source détaillée de ces résultats.
-
-## Hypothèses et limites scientifiques
-
-- Aucune imputation, interpolation, suppression silencieuse ni recalage des jours.
-  Toutes les lignes et les valeurs originales sont conservées ; les mesures
-  invalides sont signalées et exclues des seuls résumés analytiques.
-- Les doublons de jour ou métadonnées contradictoires sont exclus explicitement,
-  jamais moyennés. Le seuil « historique court » (<3 mesures) est descriptif.
-- Une visite absente est indétectable sans calendrier de visites ; l'absence de
-  [NaN](src/tumortwin/glossary.md#nan) n'établit pas la complétude du suivi. Les causes des arrêts ne sont pas connues.
-- Comparaisons par étude et jour réel ; [IQR](src/tumortwin/glossary.md#iqr) descriptif, sans test causal.
-  Les effectifs changent avec le temps et l'attrition peut être informative.
-  Un libellé Drug A/B commun ne prouve pas un même médicament entre études.
-- Le jeu d'exemple et ses six colonnes ne documentent pas toute la biologie,
-  les protocoles, ni la représentativité d'une population expérimentale.
-- La phase 1 n'ajuste aucun modèle. La phase 2 sépare les animaux par
-  (study, animal_id), puis ajuste chaque modèle sur le seul passé disponible.
-  Ne pas utiliser cette [EDA](src/tumortwin/glossary.md#eda) globale pour régler un modèle sur les futurs animaux de test.
-- Aucune donnée [TCIA](src/tumortwin/glossary.md#tcia) n'est téléchargée ; aucun suivi longitudinal [CT](src/tumortwin/glossary.md#ct) n'est supposé.
-  L'aptitude à un usage clinique n'est pas établie.
-
-## Phase 2 — modèles de référence
-
-Le [protocole de phase 2](reports/phase2_plan.md) définit les règles de l'expérience.
-Voir le [guide d'exécution](reports/phase2_implementation.md).
-Le [bilan des vérifications et les résultats de test](reports/phase2_validation.md)
-présentent l'expérience réelle, ses erreurs et ses limites.
-
-Depuis un checkout propre et committé, après `uv sync --locked` et téléchargement :
-
-```sh
-uv run tumortwin phase2 split
-uv run tumortwin phase2 develop
-uv run tumortwin phase2 freeze
-uv run tumortwin phase2 evaluate
-```
-
-La séparation comprend 104 animaux de développement et 26 de test. Les
-prévisions principales utilisent au moins six mesures passées, aux horizons
-exacts de 3, 7 et 14 jours. Le critère principal est la [MAE](src/tumortwin/glossary.md#mae)
-à sept jours, donnant le même poids à chaque animal. La [RMSE](src/tumortwin/glossary.md#rmse)
-et les erreurs relatives complètent le bilan ; seules ces dernières excluent
-les cibles nulles. Aucun rééchantillonnage ou volume futur en covariable.
-Les résultats du test sont bloqués tant que le développement n'est pas complet
-et que la configuration n'a pas été figée sur un commit propre.
-
-Les commandes affichent le répertoire `reports/phase2/<empreinte>/`, contenant
-un rapport avec glossaire local, six figures, les prévisions, les cibles exactes,
-les scores par animal et les diagnostics de tous les départs du solveur.
-Les résultats générés sont ignorés par Git. Chaque changement de code,
-configuration, protocole, données ou commit définit une nouvelle expérience.
-Les phases terminées sont vérifiées par empreinte avant réutilisation ; une
-phase incomplète est conservée pour audit et nécessite un nouveau chemin de
-sortie pour recommencer. Aucun écrasement silencieux.
-
-## Données humaines et Timestral
-
-Le [protocole humain](reports/human_protocol.md) décrit la source originale,
-la séparation des patients, les contextes et la prévision probabiliste. Le
-[bilan humain et ses graphiques](reports/human_results.md) présente les résultats
-réellement obtenus sur le test. Le
-supplément public de Laleh contient les jours relatifs au traitement et le
-diamètre de la lésion cible en millimètres. La cible est le volume estimé
-`0.5 * diamètre³` en mm³, sans normalisation sur les trajectoires complètes.
-Les résultats ne décrivent pas une segmentation anatomique ou toute la maladie.
+Install the optional inference dependencies and download the original Laleh
+supplement and pinned Timestral weights:
 
 ```sh
 uv sync --locked --extra timestral
@@ -214,37 +67,116 @@ uv run --extra timestral tumortwin human freeze
 uv run --extra timestral tumortwin human evaluate
 ```
 
-`phase3` est un alias de `human`. Utiliser `--config configs/human.toml` pour
-indiquer explicitement la configuration. Dans cet environnement, uv est sous
-`.tools/uv` ; le cache du projet se sélectionne avec `--cache-dir .uv-cache`.
-Les dépendances d'inférence sont optionnelles ; pour les quatre références
-seules, utiliser une copie de la configuration avec `timestral.enabled = false`.
+The workflow separates patient allocation, development diagnostics, configuration
+freezing and held-out evaluation. Freezing requires a clean Git checkout so each
+experiment refers to a committed implementation. The default development run is
+a deterministic pilot of 20 patients; evaluation uses the full test partition.
 
-Le pilote de développement utilise 20 patients choisis par empreinte d'identité ;
-le test utilise tous les patients de sa partition. Les identifiants anonymes
-réutilisés entre études sont exclus des expériences prédictives, conservés dans
-l'audit. Les mentions NOT EVALUABLE et TOO SMALL TO MEASURE restent manquantes,
-sans conversion en zéro. Les jours avant traitement sont conservés.
+`configs/human.toml` controls the experiment. To use only the four reference
+models, copy it and set `timestral.enabled = false`. Raw data, downloaded weights
+and complete experiment outputs stay local. After downloading, the analyses can
+run offline with `uv run --offline ...`.
 
-L'origine principale suit les six premières mesures exploitables, avec analyses
-secondaires après trois, quatre et cinq mesures. Les cibles sont les trois
-visites suivantes à leurs dates réelles ; les délais peuvent différer entre patients.
-Une visite non évaluable n'est pas remplacée par une visite plus éloignée.
-Timestral reçoit une grille quotidienne masquée ; son traitement interne propage
-les valeurs passées tout en gardant le masque. Les 21 quantiles bruts sont exportés,
-y compris les valeurs négatives ; ni plafond ni troncature à zéro ne sont ajoutés.
+## Preclinical benchmarks
 
-Les sorties sont sous `reports/human/<empreinte>/` : audit, patients et exclusions,
-protocole, prévisions avant jonction des cibles, erreurs sur support commun,
-[pinball loss](src/tumortwin/glossary.md#pinball-loss), couverture/largeur des
-intervalles, diagnostics et quantiles quotidiens. Chaque partition produit
-un rapport local avec glossaire et quatre figures : prévisions individuelles
-avec vérité et bandes d'incertitude, concordance, erreurs par visite et
-diagnostics des intervalles. Les sorties détaillées restent ignorées par Git.
+```sh
+uv run tumortwin baselines split
+uv run tumortwin baselines develop
+uv run tumortwin baselines freeze
+uv run tumortwin baselines evaluate
+```
 
-Les fichiers source et les poids sont téléchargés une fois, avec empreintes et
-licences. Les poids sont figés à `bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f` et le
-code Timestral à `a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff`. Les commandes
-d'analyse fonctionnent ensuite hors réseau avec `--offline` pour uv. Aucun
-fine-tuning ou recalibrage externe n'est effectué. L'aptitude clinique et
-l'absence de recouvrement avec le préentraînement ne sont pas établies.
+`configs/baselines.toml` defines exact 3-, 7- and 14-day horizons, with at least
+six past measurements. The human experiment instead evaluates the next observed
+visits at their actual dates. These protocols address different questions and
+their scores should not be pooled.
+
+## Data and scientific assumptions
+
+| Source | Measurements | Target and time scale |
+| --- | --- | --- |
+| [INSPECTumours](https://github.com/AstraZeneca/INSPECTumours) | Repeated preclinical tumour measurements | Volume in mm³; days after implantation |
+| [Laleh et al.](https://doi.org/10.1371/journal.pcbi.1009822) | Human target-lesion diameters during treatment | Estimated volume `0.5 × diameter_mm³`; actual days relative to treatment |
+
+The human target is a diameter-derived estimate for one lesion, rather than
+segmented anatomical volume or total tumour burden. `TOO SMALL TO MEASURE` and
+`NOT EVALUABLE` remain missing, not zero. Anonymous identifiers reused across
+studies are excluded from predictive experiments.
+
+Each model receives only its available prefix. Future target volumes never
+enter its inputs. Targets are not interpolated. Timestral receives a daily grid
+with missing-value indicators; its upstream implementation internally carries
+past values forward while retaining the mask. Raw negative forecasts and
+quantiles remain visible, without silent clipping or external recalibration.
+
+Sources are downloaded separately and checked using
+[SHA-256](src/tumortwin/glossary.md#sha-256). Data and model licences are distinct
+from the project code licence; see [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## Reference results
+
+In the recorded human experiment, 91 held-out patients had a usable next visit
+after six observations. The visit delay had a median of 42 days. The
+[mean absolute error](src/tumortwin/glossary.md#mae) was 7,626 mm³ estimated for
+persistence and 8,524 mm³ estimated for the Timestral median. Timestral did not
+improve point accuracy in that comparison; some raw intervals were wide and
+included negative values.
+
+![Forecast error on the recorded human experiment](reports/human_review/primary_errors.png)
+
+These are results of a specific experiment, not general performance guarantees.
+The [human results](docs/human_results.md) and [preclinical results](docs/preclinical_results.md)
+include supports, uncertainty diagnostics, execution commits and provenance.
+A change to configuration, inputs, implementation or commit creates a new experiment.
+
+## Documentation
+
+Detailed methods and experiment reports are currently written in French.
+
+| Document | Contents |
+| --- | --- |
+| [Human protocol](docs/human_protocol.md) | Patient split, censored readings, grids, quantiles and metrics |
+| [Human results](docs/human_results.md) | Predictions against observations and probabilistic diagnostics |
+| [Preclinical protocol](docs/preclinical_protocol.md) | Numerical fits, chronological evaluation and common targets |
+| [Preclinical usage](docs/preclinical_usage.md) | Commands, configuration and output files |
+| [Preclinical results](docs/preclinical_results.md) | Recorded benchmark and limitations |
+| [Data checks](docs/data_checks.md) | Source inspection and exploratory checks |
+| [Data guide](data/README.md) | Source formats and provenance |
+| [Glossary](src/tumortwin/glossary.md) | Acronyms and evaluation terms |
+
+## Project layout
+
+```text
+configs/                   Exploration and forecasting configurations
+docs/                      Methods, data checks and reference experiments
+src/tumortwin/
+    data/                  Data access, adapters and quality checks
+    baselines/             Individual mechanistic models
+    timestral/             Optional zero-shot forecasting adapter
+    evaluation/            Experimental design, metrics and reporting
+tests/                     Offline tests using synthetic fixtures
+reports/                   Curated figures and local generated analyses
+```
+
+## Development
+
+```sh
+uv sync --locked
+uv run --offline pytest
+uv build
+```
+
+Tests use synthetic fixtures and mocked downloads; they require neither real
+patient data nor model weights. Continuous integration runs tests and builds on
+Python 3.11 and 3.14. See [CONTRIBUTING.md](CONTRIBUTING.md) for contributions
+and bug reports.
+
+## Licence and attribution
+
+Original TumorTwin code is distributed under the [MIT licence](LICENSE).
+Datasets, model weights and dependencies retain their own terms. In particular,
+Timestral weights use a **Modified MIT licence with additional conditions**;
+they are not covered by TumorTwin's MIT licence.
+
+Please cite the original data and model sources when reporting results.
+Attribution details are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

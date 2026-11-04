@@ -1,7 +1,7 @@
 project_root = ".."
 input = "data/raw/laleh/journal.pcbi.1009822.s006.xlsx"
 output = "reports/human"
-protocol = "reports/human_protocol.md"
+protocol = "docs/human_protocol.md"
 seed = 20261104
 test_fraction = 0.2
 contexts = [3, 4, 5, 6]
