@@ -1,7 +1,8 @@
 # TumorTwin
 
 ## Périmètre
-Le projet couvre l'analyse exploratoire et les modèles individuels de référence.
+Le projet couvre l'analyse exploratoire, les modèles individuels de référence
+et les prévisions zero-shot Timestral sur les données humaines Laleh.
 Suivre le protocole `reports/phase2_plan.md`. Ne pas ajouter de fine-tuning, calibration externe,
 serveur [MCP](src/tumortwin/glossary.md#mcp) ni interprétation clinique.
 
@@ -27,6 +28,11 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
 ## Règles scientifiques
 - Clé d'individu : (study, animal_id), jamais animal_id seul.
 - Préserver les jours réels après implantation et les volumes en mm³.
+- Pour Laleh : jours relatifs au traitement et volumes estimés par 0,5 × diamètre³,
+  sans normalisation globale. Préserver les censures textuelles ; ne pas les coder zéro.
+- Exclure des expériences prédictives les identifiants anonymes réutilisés entre études.
+- Timestral : poids figés, aucun fine-tuning, grille quotidienne masquée ; documenter
+  le remplissage interne du modèle et conserver les sorties négatives brutes.
 - Conserver les valeurs manquantes et les lignes source ; aucune imputation.
 - Signaler les doublons, volumes négatifs, valeurs non numériques et historiques
   courts ; ne pas agréger silencieusement les mesures dupliquées.

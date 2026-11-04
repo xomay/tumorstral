@@ -11,7 +11,7 @@ from .data.inspectumours import download
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="TumorTwin — phases 1 et 2")
+    parser = argparse.ArgumentParser(description="TumorTwin — trajectoires précliniques et humaines")
     commands = parser.add_subparsers(dest="command", required=True)
     fetch = commands.add_parser("download", help="Fetch pinned upstream example and license")
     fetch.add_argument("--destination", type=Path, default=Path("data/raw"))
@@ -23,10 +23,34 @@ def main() -> None:
     phase2 = commands.add_parser("phase2", help="Split, development, freeze and final baseline evaluation")
     phase2.add_argument("action", choices=["split", "develop", "freeze", "evaluate"])
     phase2.add_argument("--config", type=Path, default=Path("configs/phase2.toml"))
+    for name in ["human", "phase3"]:
+        human = commands.add_parser(name, help="Human Laleh baselines and zero-shot Timestral")
+        human.add_argument("action", choices=["download", "audit", "split", "develop", "freeze", "evaluate"])
+        human.add_argument("--config", type=Path, default=Path("configs/human.toml"))
     args = parser.parse_args()
     try:
         if args.command == "download":
             print(download(args.destination))
+            return
+        if args.command in {"human", "phase3"}:
+            from .evaluation.human import design, freeze_human, run_human
+
+            if args.action == "download":
+                from .data.laleh import download_laleh
+                from .timestral.download import download_model
+
+                cfg = tomllib.loads(args.config.read_text())
+                root = (args.config.resolve().parent/cfg["project_root"]).resolve()
+                print(download_laleh((root/cfg["input"]).parent))
+                if cfg["timestral"]["enabled"]:
+                    print(download_model(root/cfg["timestral"]["local_model"]))
+            elif args.action in {"audit", "split"}:
+                _, run, _, _, split = design(args.config)
+                print(json.dumps({"run": str(run), "partitions": split.partition.value_counts().to_dict()}))
+            elif args.action == "freeze":
+                print(freeze_human(args.config))
+            else:
+                print(run_human(args.config, "development" if args.action == "develop" else "test"))
             return
         if args.command == "phase2":
             from .evaluation.experiment import freeze, prepare, run_partition

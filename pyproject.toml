@@ -14,6 +14,7 @@ dependencies = [
     "matplotlib>=3.9",
     "rdata>=1.0",
     "scipy>=1.15",
+    "openpyxl>=3.1.5",
 ]
 
 [dependency-groups]
@@ -22,6 +23,21 @@ dev = ["pytest>=8.3"]
 [project.scripts]
 tumortwin = "tumortwin.cli:main"
 
+[project.optional-dependencies]
+timestral = [
+    "timestral",
+    "torch>=2.4",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+timestral = { git = "https://github.com/mistralai/timestral.git", rev = "a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff" }

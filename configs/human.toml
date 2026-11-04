@@ -1,0 +1,32 @@
+project_root = ".."
+input = "data/raw/laleh/journal.pcbi.1009822.s006.xlsx"
+output = "reports/human"
+protocol = "reports/human_protocol.md"
+seed = 20261104
+test_fraction = 0.2
+contexts = [3, 4, 5, 6]
+primary_context = 6
+horizons = [1, 2, 3]
+development_patients = 20
+workers = 4
+bootstrap_samples = 2000
+baseline_time_scale_days = 7.0
+
+[fit]
+max_nfev = 2000
+tolerance = 1e-8
+volume_lower = 1e-6
+volume_upper_factor = 1000.0
+rate_bound = 2.0
+exponential_starts = [-0.1, 0.0, 0.1]
+rate_starts = [0.01, 0.1, 0.5]
+capacity_factors = [0.5, 1.0, 2.0, 10.0]
+condition_threshold = 1e8
+boundary_threshold = 1e-4
+
+[timestral]
+enabled = true
+local_model = "data/raw/timestral-5m"
+model_revision = "bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f"
+grid_step_days = 1.0
+threads = 2

@@ -4,6 +4,9 @@ Prototype scientifique reproductible de prévision temporelle et de modélisatio
 mathématique tumorale. **Les phases 1 et 2 sont implémentées** :
 analyse exploratoire et comparaison de quatre modèles individuels de référence.
 
+Les trajectoires humaines de Laleh et Timestral-5M zero-shot sont également
+disponibles, avec prévisions probabilistes et graphiques face aux observations.
+
 **Aide à la lecture :** les acronymes du texte sont cliquables.
 Consultez le [glossaire des acronymes](src/tumortwin/glossary.md).
 Cette convention est inscrite dans AGENTS.md pour les prochaines réalisations.
@@ -189,3 +192,57 @@ configuration, protocole, données ou commit définit une nouvelle expérience.
 Les phases terminées sont vérifiées par empreinte avant réutilisation ; une
 phase incomplète est conservée pour audit et nécessite un nouveau chemin de
 sortie pour recommencer. Aucun écrasement silencieux.
+
+## Données humaines et Timestral
+
+Le [protocole humain](reports/human_protocol.md) décrit la source originale,
+la séparation des patients, les contextes et la prévision probabiliste. Le
+supplément public de Laleh contient les jours relatifs au traitement et le
+diamètre de la lésion cible en millimètres. La cible est le volume estimé
+`0.5 * diamètre³` en mm³, sans normalisation sur les trajectoires complètes.
+Les résultats ne décrivent pas une segmentation anatomique ou toute la maladie.
+
+```sh
+uv sync --locked --extra timestral
+uv run --extra timestral tumortwin human download
+uv run --extra timestral tumortwin human audit
+uv run --extra timestral tumortwin human split
+uv run --extra timestral tumortwin human develop
+uv run --extra timestral tumortwin human freeze
+uv run --extra timestral tumortwin human evaluate
+```
+
+`phase3` est un alias de `human`. Utiliser `--config configs/human.toml` pour
+indiquer explicitement la configuration. Dans cet environnement, uv est sous
+`.tools/uv` ; le cache du projet se sélectionne avec `--cache-dir .uv-cache`.
+Les dépendances d'inférence sont optionnelles ; pour les quatre références
+seules, utiliser une copie de la configuration avec `timestral.enabled = false`.
+
+Le pilote de développement utilise 20 patients choisis par empreinte d'identité ;
+le test utilise tous les patients de sa partition. Les identifiants anonymes
+réutilisés entre études sont exclus des expériences prédictives, conservés dans
+l'audit. Les mentions NOT EVALUABLE et TOO SMALL TO MEASURE restent manquantes,
+sans conversion en zéro. Les jours avant traitement sont conservés.
+
+L'origine principale suit les six premières mesures exploitables, avec analyses
+secondaires après trois, quatre et cinq mesures. Les cibles sont les trois
+visites suivantes à leurs dates réelles ; les délais peuvent différer entre patients.
+Une visite non évaluable n'est pas remplacée par une visite plus éloignée.
+Timestral reçoit une grille quotidienne masquée ; son traitement interne propage
+les valeurs passées tout en gardant le masque. Les 21 quantiles bruts sont exportés,
+y compris les valeurs négatives ; ni plafond ni troncature à zéro ne sont ajoutés.
+
+Les sorties sont sous `reports/human/<empreinte>/` : audit, patients et exclusions,
+protocole, prévisions avant jonction des cibles, erreurs sur support commun,
+[pinball loss](src/tumortwin/glossary.md#pinball-loss), couverture/largeur des
+intervalles, diagnostics et quantiles quotidiens. Chaque partition produit
+un rapport local avec glossaire et quatre figures : prévisions individuelles
+avec vérité et bandes d'incertitude, concordance, erreurs par visite et
+diagnostics des intervalles. Les sorties détaillées restent ignorées par Git.
+
+Les fichiers source et les poids sont téléchargés une fois, avec empreintes et
+licences. Les poids sont figés à `bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f` et le
+code Timestral à `a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff`. Les commandes
+d'analyse fonctionnent ensuite hors réseau avec `--offline` pour uv. Aucun
+fine-tuning ou recalibrage externe n'est effectué. L'aptitude clinique et
+l'absence de recouvrement avec le préentraînement ne sont pas établies.

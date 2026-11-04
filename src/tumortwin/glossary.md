@@ -125,3 +125,22 @@ Leur sens exact doit toujours être vérifié dans le dictionnaire de la source.
 
 **Trois dimensions spatiales.** Désigne la représentation spatiale des tissus
 et de la tumeur, distincte d'une série temporelle.
+
+## Quantile
+
+Seuil associé à une proportion de valeurs prévues : le quantile 90 % doit
+contenir sous lui environ 90 % des observations si les prévisions sont fiables.
+Les quantiles 10 % et 90 % délimitent un intervalle nominal à 80 %.
+
+## Pinball loss
+
+Erreur adaptée à un quantile de niveau `q` : `max(q*(y-p), (q-1)*(y-p))`,
+où `y` est l'observation et `p` le quantile prévu. Les valeurs faibles sont
+préférables. Elle s'exprime dans l'unité de la cible et ne remplace pas l'étude
+de la couverture et de la largeur des intervalles.
+
+## Zero-shot
+
+Utilisation d'un modèle préentraîné sans réajuster ses poids sur les données
+évaluées. La provenance du préentraînement ne garantit pas l'absence de
+recouvrement avec un jeu de données public.
