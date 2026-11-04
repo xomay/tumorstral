@@ -197,6 +197,8 @@ sortie pour recommencer. Aucun écrasement silencieux.
 
 Le [protocole humain](reports/human_protocol.md) décrit la source originale,
 la séparation des patients, les contextes et la prévision probabiliste. Le
+[bilan humain et ses graphiques](reports/human_results.md) présente les résultats
+réellement obtenus sur le test. Le
 supplément public de Laleh contient les jours relatifs au traitement et le
 diamètre de la lésion cible en millimètres. La cible est le volume estimé
 `0.5 * diamètre³` en mm³, sans normalisation sur les trajectoires complètes.

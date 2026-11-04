@@ -1,0 +1,964 @@
+{
+  "experiment_id": "d1acaeaea2b0e3ceb2b0",
+  "execution_commit": "88f21c255c7a51bd31ee0d42622a66641bcb9fb5",
+  "python": "3.14.4",
+  "data_sha256": "ffca72e8b9a54129d2245c315ba89d8169e63dbd2c971119a63f454e5fe63e3d",
+  "freeze_sha256": "c171497264a7d1c44b232b33051486d79fbd50ebba0bc89d3b8e245e5e0142ce",
+  "test_complete_sha256": "b3432638502e8ac5589e8e6c1c75ab55e4d3b8ce4b40bf073841614c00b23050",
+  "configuration": {
+    "baseline_time_scale_days": 7.0,
+    "bootstrap_samples": 2000,
+    "contexts": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "development_patients": 20,
+    "fit": {
+      "boundary_threshold": 0.0001,
+      "capacity_factors": [
+        0.5,
+        1.0,
+        2.0,
+        10.0
+      ],
+      "condition_threshold": 100000000.0,
+      "exponential_starts": [
+        -0.1,
+        0.0,
+        0.1
+      ],
+      "max_nfev": 2000,
+      "rate_bound": 2.0,
+      "rate_starts": [
+        0.01,
+        0.1,
+        0.5
+      ],
+      "tolerance": 1e-08,
+      "volume_lower": 1e-06,
+      "volume_upper_factor": 1000.0
+    },
+    "horizons": [
+      1,
+      2,
+      3
+    ],
+    "input": "data/raw/laleh/journal.pcbi.1009822.s006.xlsx",
+    "output": "reports/human",
+    "primary_context": 6,
+    "project_root": "..",
+    "protocol": "reports/human_protocol.md",
+    "seed": 20261104,
+    "test_fraction": 0.2,
+    "timestral": {
+      "enabled": true,
+      "grid_step_days": 1.0,
+      "local_model": "data/raw/timestral-5m",
+      "model_revision": "bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f",
+      "threads": 2
+    },
+    "workers": 4
+  },
+  "model_provenance": {
+    "code_revision": "a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff",
+    "files": {
+      "LICENSE": "648194727930df730890e9f9affdbcc5c930d406d6829559b25ca3d5a973fc8c",
+      "config.json": "b5f27f61513f8fd1a3aa996f3720d3679cb40bce5bcb08eb3dc320ce726e7c2f",
+      "model.safetensors": "7ace108c4987e7f2a99a75a445240019d1d31c2117139d1bd05ffdfd25aca738"
+    },
+    "model_revision": "bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f",
+    "repository": "mistralai/Timestral-5M"
+  },
+  "primary_point_scores": [
+    {
+      "model": "persistence",
+      "n_context": 6,
+      "horizon": 1,
+      "support": "common",
+      "n_patients": 91,
+      "n_pairs": 91,
+      "n_available": 91,
+      "coverage": 1.0,
+      "common_fraction": 1.0,
+      "mae": 7626.4444318407,
+      "rmse": 25863.8328263054,
+      "bias": -90.1968171593,
+      "median_relative": 0.1096525833,
+      "negative_predictions": 0
+    },
+    {
+      "model": "exponential",
+      "n_context": 6,
+      "horizon": 1,
+      "support": "common",
+      "n_patients": 91,
+      "n_pairs": 91,
+      "n_available": 91,
+      "coverage": 1.0,
+      "common_fraction": 1.0,
+      "mae": 12061.6980318873,
+      "rmse": 32914.5195383543,
+      "bias": -7485.9239900582,
+      "median_relative": 0.2865378623,
+      "negative_predictions": 0
+    },
+    {
+      "model": "logistic",
+      "n_context": 6,
+      "horizon": 1,
+      "support": "common",
+      "n_patients": 91,
+      "n_pairs": 91,
+      "n_available": 91,
+      "coverage": 1.0,
+      "common_fraction": 1.0,
+      "mae": 9487.4254241957,
+      "rmse": 27934.2028087727,
+      "bias": -909.7412814684,
+      "median_relative": 0.2261625866,
+      "negative_predictions": 0
+    },
+    {
+      "model": "gompertz",
+      "n_context": 6,
+      "horizon": 1,
+      "support": "common",
+      "n_patients": 91,
+      "n_pairs": 91,
+      "n_available": 91,
+      "coverage": 1.0,
+      "common_fraction": 1.0,
+      "mae": 9288.1045166895,
+      "rmse": 28057.3607710902,
+      "bias": -2271.193085889,
+      "median_relative": 0.2114466932,
+      "negative_predictions": 0
+    },
+    {
+      "model": "timestral",
+      "n_context": 6,
+      "horizon": 1,
+      "support": "common",
+      "n_patients": 91,
+      "n_pairs": 91,
+      "n_available": 91,
+      "coverage": 1.0,
+      "common_fraction": 1.0,
+      "mae": 8524.2817586272,
+      "rmse": 25987.6762196351,
+      "bias": 805.5259437221,
+      "median_relative": 0.1247879225,
+      "negative_predictions": 8
+    }
+  ],
+  "probabilistic_scores": [
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "nominal": 0.8,
+      "n_patients": 205,
+      "n_pairs": 205,
+      "pinball": 23655293158.353855,
+      "interval_coverage": 0.7902439024,
+      "mean_width": 8454383.871313365,
+      "negative_quantile_fraction": 0.1521486643
+    },
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "nominal": 0.9,
+      "n_patients": 205,
+      "n_pairs": 205,
+      "pinball": 23655293158.353855,
+      "interval_coverage": 0.9170731707,
+      "mean_width": 2275618149.1540904,
+      "negative_quantile_fraction": 0.1521486643
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "nominal": 0.8,
+      "n_patients": 156,
+      "n_pairs": 156,
+      "pinball": 5498474470.668399,
+      "interval_coverage": 0.7435897436,
+      "mean_width": 8178970.190946432,
+      "negative_quantile_fraction": 0.1828449328
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "nominal": 0.9,
+      "n_patients": 156,
+      "n_pairs": 156,
+      "pinball": 5498474470.668399,
+      "interval_coverage": 0.9038461538,
+      "mean_width": 376722258.1564822,
+      "negative_quantile_fraction": 0.1828449328
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "nominal": 0.8,
+      "n_patients": 123,
+      "n_pairs": 123,
+      "pinball": 264763316263.81616,
+      "interval_coverage": 0.7967479675,
+      "mean_width": 251797318.89682305,
+      "negative_quantile_fraction": 0.2202864886
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "nominal": 0.9,
+      "n_patients": 123,
+      "n_pairs": 123,
+      "pinball": 264763316263.81616,
+      "interval_coverage": 0.9024390244,
+      "mean_width": 41804225580.36036,
+      "negative_quantile_fraction": 0.2202864886
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "nominal": 0.8,
+      "n_patients": 156,
+      "n_pairs": 156,
+      "pinball": 8828865.06190466,
+      "interval_coverage": 0.8012820513,
+      "mean_width": 112634.0079375047,
+      "negative_quantile_fraction": 0.1550671551
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "nominal": 0.9,
+      "n_patients": 156,
+      "n_pairs": 156,
+      "pinball": 8828865.06190466,
+      "interval_coverage": 0.9166666667,
+      "mean_width": 2896942.2230461803,
+      "negative_quantile_fraction": 0.1550671551
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "nominal": 0.8,
+      "n_patients": 123,
+      "n_pairs": 123,
+      "pinball": 1172147914.5414572,
+      "interval_coverage": 0.7723577236,
+      "mean_width": 43368850.37889552,
+      "negative_quantile_fraction": 0.2024777391
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "nominal": 0.9,
+      "n_patients": 123,
+      "n_pairs": 123,
+      "pinball": 1172147914.5414572,
+      "interval_coverage": 0.9268292683,
+      "mean_width": 1077177467.8221767,
+      "negative_quantile_fraction": 0.2024777391
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "nominal": 0.8,
+      "n_patients": 92,
+      "n_pairs": 92,
+      "pinball": 1120665756906.7197,
+      "interval_coverage": 0.8804347826,
+      "mean_width": 2097036973.7202165,
+      "negative_quantile_fraction": 0.2494824017
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "nominal": 0.9,
+      "n_patients": 92,
+      "n_pairs": 92,
+      "pinball": 1120665756906.7197,
+      "interval_coverage": 0.9239130435,
+      "mean_width": 35820673413.3522,
+      "negative_quantile_fraction": 0.2494824017
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "nominal": 0.8,
+      "n_patients": 121,
+      "n_pairs": 121,
+      "pinball": 544325.1781234377,
+      "interval_coverage": 0.7603305785,
+      "mean_width": 263484.3792945294,
+      "negative_quantile_fraction": 0.1558441558
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "nominal": 0.9,
+      "n_patients": 121,
+      "n_pairs": 121,
+      "pinball": 544325.1781234377,
+      "interval_coverage": 0.9008264463,
+      "mean_width": 6501235.690580636,
+      "negative_quantile_fraction": 0.1558441558
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "nominal": 0.8,
+      "n_patients": 91,
+      "n_pairs": 91,
+      "pinball": 8071172.491997551,
+      "interval_coverage": 0.8131868132,
+      "mean_width": 274604.0623822055,
+      "negative_quantile_fraction": 0.1936159079
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "nominal": 0.9,
+      "n_patients": 91,
+      "n_pairs": 91,
+      "pinball": 8071172.491997551,
+      "interval_coverage": 0.9340659341,
+      "mean_width": 8601213.729074666,
+      "negative_quantile_fraction": 0.1936159079
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "nominal": 0.8,
+      "n_patients": 69,
+      "n_pairs": 69,
+      "pinball": 8727362413.295757,
+      "interval_coverage": 0.8550724638,
+      "mean_width": 18984926.03208647,
+      "negative_quantile_fraction": 0.2291235335
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "nominal": 0.9,
+      "n_patients": 69,
+      "n_pairs": 69,
+      "pinball": 8727362413.295757,
+      "interval_coverage": 0.9420289855,
+      "mean_width": 1433462377.0328887,
+      "negative_quantile_fraction": 0.2291235335
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "nominal": 0.8,
+      "n_patients": 91,
+      "n_pairs": 91,
+      "pinball": 5486.1183995884,
+      "interval_coverage": 0.8241758242,
+      "mean_width": 44888.4309055203,
+      "negative_quantile_fraction": 0.1522762951
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "nominal": 0.9,
+      "n_patients": 91,
+      "n_pairs": 91,
+      "pinball": 5486.1183995884,
+      "interval_coverage": 0.956043956,
+      "mean_width": 150389.6995964469,
+      "negative_quantile_fraction": 0.1522762951
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "nominal": 0.8,
+      "n_patients": 69,
+      "n_pairs": 69,
+      "pinball": 432545.1442018466,
+      "interval_coverage": 0.768115942,
+      "mean_width": 115602.6866702757,
+      "negative_quantile_fraction": 0.1746031746
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "nominal": 0.9,
+      "n_patients": 69,
+      "n_pairs": 69,
+      "pinball": 432545.1442018466,
+      "interval_coverage": 0.9275362319,
+      "mean_width": 1244271.9345232092,
+      "negative_quantile_fraction": 0.1746031746
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "nominal": 0.8,
+      "n_patients": 54,
+      "n_pairs": 54,
+      "pinball": 591909194.7131158,
+      "interval_coverage": 0.7777777778,
+      "mean_width": 1518325.5516045182,
+      "negative_quantile_fraction": 0.2178130511
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "nominal": 0.9,
+      "n_patients": 54,
+      "n_pairs": 54,
+      "pinball": 591909194.7131158,
+      "interval_coverage": 0.9259259259,
+      "mean_width": 112675830.01561229,
+      "negative_quantile_fraction": 0.2178130511
+    }
+  ],
+  "paired_bootstrap": [
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "model": "exponential",
+      "n_patients": 205,
+      "delta_mae": 7420.3841908788,
+      "lower": 1508.2117483392,
+      "upper": 16120.2015754768
+    },
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "model": "gompertz",
+      "n_patients": 205,
+      "delta_mae": 3561.4202566817,
+      "lower": -64.1633514576,
+      "upper": 9000.8013755391
+    },
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "model": "logistic",
+      "n_patients": 205,
+      "delta_mae": 5143.7182896707,
+      "lower": 69.937972199,
+      "upper": 13416.0862814201
+    },
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "model": "persistence",
+      "n_patients": 205,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 3,
+      "horizon": 1,
+      "model": "timestral",
+      "n_patients": 205,
+      "delta_mae": 1547.327198355,
+      "lower": -114.1944041768,
+      "upper": 3782.3192596337
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "model": "exponential",
+      "n_patients": 156,
+      "delta_mae": 6238.0350267792,
+      "lower": 415.9506534917,
+      "upper": 12408.4647180635
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "model": "gompertz",
+      "n_patients": 156,
+      "delta_mae": -757.214413559,
+      "lower": -3644.1544283469,
+      "upper": 1727.7215243641
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "model": "logistic",
+      "n_patients": 156,
+      "delta_mae": -423.4682453099,
+      "lower": -2592.8969924661,
+      "upper": 1664.4062454164
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "model": "persistence",
+      "n_patients": 156,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 3,
+      "horizon": 2,
+      "model": "timestral",
+      "n_patients": 156,
+      "delta_mae": 518.6136814194,
+      "lower": -403.1816811593,
+      "upper": 1620.1972882251
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "model": "exponential",
+      "n_patients": 123,
+      "delta_mae": 7384.9863916287,
+      "lower": -2533.4871541967,
+      "upper": 17200.1439615552
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "model": "gompertz",
+      "n_patients": 123,
+      "delta_mae": -1038.1687082569,
+      "lower": -4343.3720726054,
+      "upper": 2143.2584483061
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "model": "logistic",
+      "n_patients": 123,
+      "delta_mae": -186.7838760057,
+      "lower": -2386.5369422534,
+      "upper": 2174.3659801065
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "model": "persistence",
+      "n_patients": 123,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 3,
+      "horizon": 3,
+      "model": "timestral",
+      "n_patients": 123,
+      "delta_mae": 291.4596445308,
+      "lower": -1423.6095747169,
+      "upper": 2198.5714590416
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "model": "exponential",
+      "n_patients": 156,
+      "delta_mae": 3743.5727214332,
+      "lower": -438.4171378662,
+      "upper": 7548.5668772879
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "model": "gompertz",
+      "n_patients": 156,
+      "delta_mae": 726.6649209135,
+      "lower": -2099.7404454625,
+      "upper": 3536.3385243088
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "model": "logistic",
+      "n_patients": 156,
+      "delta_mae": 947.6465794362,
+      "lower": -2318.8942742984,
+      "upper": 4051.0687158488
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "model": "persistence",
+      "n_patients": 156,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 4,
+      "horizon": 1,
+      "model": "timestral",
+      "n_patients": 156,
+      "delta_mae": -76.8977053309,
+      "lower": -923.5071503312,
+      "upper": 779.969905425
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "model": "exponential",
+      "n_patients": 123,
+      "delta_mae": 2929.1509132984,
+      "lower": -5814.5328859804,
+      "upper": 10368.6694400008
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "model": "gompertz",
+      "n_patients": 123,
+      "delta_mae": -2578.6970872961,
+      "lower": -10436.412093305,
+      "upper": 2971.9485020938
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "model": "logistic",
+      "n_patients": 123,
+      "delta_mae": -1703.9487495805,
+      "lower": -9179.2274076621,
+      "upper": 3502.0454827697
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "model": "persistence",
+      "n_patients": 123,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 4,
+      "horizon": 2,
+      "model": "timestral",
+      "n_patients": 123,
+      "delta_mae": 100.6465413938,
+      "lower": -1083.9282921531,
+      "upper": 1347.7060853888
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "model": "exponential",
+      "n_patients": 92,
+      "delta_mae": 6902.5445545077,
+      "lower": 1694.2781626026,
+      "upper": 12235.343355984
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "model": "gompertz",
+      "n_patients": 92,
+      "delta_mae": 2167.8028700689,
+      "lower": -448.5928378372,
+      "upper": 5102.872459305
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "model": "logistic",
+      "n_patients": 92,
+      "delta_mae": 1843.1024231197,
+      "lower": -34.7416174965,
+      "upper": 4038.6446460926
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "model": "persistence",
+      "n_patients": 92,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 4,
+      "horizon": 3,
+      "model": "timestral",
+      "n_patients": 92,
+      "delta_mae": -376.6546613306,
+      "lower": -2019.3232128007,
+      "upper": 1372.3273548205
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "model": "exponential",
+      "n_patients": 121,
+      "delta_mae": 6993.0445296511,
+      "lower": 2711.8173062405,
+      "upper": 12141.6729179681
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "model": "gompertz",
+      "n_patients": 121,
+      "delta_mae": 2978.2598617222,
+      "lower": 700.4183032238,
+      "upper": 5638.8747973356
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "model": "logistic",
+      "n_patients": 121,
+      "delta_mae": 4904.768084152,
+      "lower": 2329.4101416472,
+      "upper": 8405.1026484631
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "model": "persistence",
+      "n_patients": 121,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 5,
+      "horizon": 1,
+      "model": "timestral",
+      "n_patients": 121,
+      "delta_mae": 1050.4667124058,
+      "lower": -714.4881211568,
+      "upper": 3356.8857543533
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "model": "exponential",
+      "n_patients": 91,
+      "delta_mae": 4234.3861472294,
+      "lower": -1023.3461672967,
+      "upper": 9646.7646276009
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "model": "gompertz",
+      "n_patients": 91,
+      "delta_mae": 133.5310546408,
+      "lower": -3784.3125342605,
+      "upper": 3517.9265187137
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "model": "logistic",
+      "n_patients": 91,
+      "delta_mae": 528.5238712867,
+      "lower": -3195.4377094957,
+      "upper": 3951.842685561
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "model": "persistence",
+      "n_patients": 91,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 5,
+      "horizon": 2,
+      "model": "timestral",
+      "n_patients": 91,
+      "delta_mae": 2189.1958129763,
+      "lower": -0.9479985375,
+      "upper": 5698.5292818919
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "model": "exponential",
+      "n_patients": 69,
+      "delta_mae": 11407.7787596321,
+      "lower": 3459.9798500872,
+      "upper": 21148.9343652366
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "model": "gompertz",
+      "n_patients": 69,
+      "delta_mae": 6908.7907234927,
+      "lower": 1656.9543709403,
+      "upper": 14275.3931479869
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "model": "logistic",
+      "n_patients": 69,
+      "delta_mae": 7324.7072337462,
+      "lower": 1533.2231650107,
+      "upper": 15379.2759263564
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "model": "persistence",
+      "n_patients": 69,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 5,
+      "horizon": 3,
+      "model": "timestral",
+      "n_patients": 69,
+      "delta_mae": 1906.749776553,
+      "lower": -507.6383622638,
+      "upper": 5266.7283125568
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "model": "exponential",
+      "n_patients": 91,
+      "delta_mae": 4435.2536000467,
+      "lower": 669.5673773987,
+      "upper": 7891.5558012888
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "model": "gompertz",
+      "n_patients": 91,
+      "delta_mae": 1661.6600848488,
+      "lower": -804.3439357416,
+      "upper": 4075.9930389043
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "model": "logistic",
+      "n_patients": 91,
+      "delta_mae": 1860.980992355,
+      "lower": -632.8365487434,
+      "upper": 4237.4276937806
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "model": "persistence",
+      "n_patients": 91,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 6,
+      "horizon": 1,
+      "model": "timestral",
+      "n_patients": 91,
+      "delta_mae": 897.8373267866,
+      "lower": 30.3637279653,
+      "upper": 1855.7364518543
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "model": "exponential",
+      "n_patients": 69,
+      "delta_mae": 3781.1272575032,
+      "lower": -1937.9223736948,
+      "upper": 9541.3637822032
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "model": "gompertz",
+      "n_patients": 69,
+      "delta_mae": 3261.9261867631,
+      "lower": -111.2915924416,
+      "upper": 7007.7140753204
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "model": "logistic",
+      "n_patients": 69,
+      "delta_mae": 2548.0319207503,
+      "lower": -684.0488212802,
+      "upper": 5982.5073520142
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "model": "persistence",
+      "n_patients": 69,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 6,
+      "horizon": 2,
+      "model": "timestral",
+      "n_patients": 69,
+      "delta_mae": 1037.9830316832,
+      "lower": -622.5159251751,
+      "upper": 2743.853829665
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "model": "exponential",
+      "n_patients": 54,
+      "delta_mae": 3907.1000069251,
+      "lower": -2550.0835102608,
+      "upper": 11086.8306411931
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "model": "gompertz",
+      "n_patients": 54,
+      "delta_mae": 3212.4921420878,
+      "lower": -92.3101210315,
+      "upper": 7022.2680897235
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "model": "logistic",
+      "n_patients": 54,
+      "delta_mae": 3339.9693184947,
+      "lower": 469.1903341176,
+      "upper": 6938.9110029731
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "model": "persistence",
+      "n_patients": 54,
+      "delta_mae": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "n_context": 6,
+      "horizon": 3,
+      "model": "timestral",
+      "n_patients": 54,
+      "delta_mae": 939.3100602567,
+      "lower": -681.1673352291,
+      "upper": 2477.5732639871
+    }
+  ]
+}
