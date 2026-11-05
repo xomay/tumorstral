@@ -110,6 +110,8 @@ models on common targets, retain raw negative Timestral outputs, and include
 paired differences against persistence and Gompertz plus interval diagnostics.
 This is an exploratory extension made after the classical results were inspected;
 see the [extension protocol](docs/preclinical_timestral_protocol.md).
+The [recorded INSPECTumours comparison](docs/preclinical_timestral_results.md)
+includes point errors, paired differences and raw interval coverage.
 
 ## Data and scientific assumptions
 

@@ -14,6 +14,7 @@ leurs dates, leurs unités et leurs limites d'interprétation.
 | Exécuter une comparaison préclinique | [Guide d'exécution](preclinical_usage.md) |
 | Résultats INSPECTumours | [Résultats précliniques](preclinical_results.md) |
 | Extension Timestral sur INSPECTumours | [Protocole exploratoire](preclinical_timestral_protocol.md) |
+| Résultats Timestral sur INSPECTumours | [Comparaison aux quatre références](preclinical_timestral_results.md) |
 | Trajectoires humaines et Timestral | [Protocole humain](human_protocol.md) |
 | Résultats Laleh et graphiques | [Résultats humains](human_results.md) |
 | Définitions et unités | [Glossaire](../src/tumortwin/glossary.md) |
