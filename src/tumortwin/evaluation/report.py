@@ -12,11 +12,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..baselines import MODELS
 from ..data.quality import normalize
 from ..eda import _table_markdown
+from .preclinical_timestral import enabled, model_names
 
-LABELS = dict(persistence="Persistance", exponential="Exponentiel", logistic="Logistique", gompertz="Gompertz")
+LABELS = dict(persistence="Persistance", exponential="Exponentiel", logistic="Logistique",
+              gompertz="Gompertz", timestral="Timestral (médiane)")
 
 
 def save(fig: plt.Figure, path: Path) -> None:
@@ -29,11 +30,12 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
                  cfg: dict, partition: str) -> None:
     figures = folder/"figures"
     figures.mkdir()
+    models = model_names(cfg)
     common = pd.read_csv(folder/"main_common_scores.csv")
     cov = pd.read_csv(folder/"coverage.csv")
     boot = pd.read_csv(folder/"main_common_bootstrap.csv")
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-    for model in MODELS:
+    for model in models:
         group = common.loc[common.model == model]
         axes[0].plot(group.horizon_days, group.mae, "o-", label=LABELS[model])
         group = cov.loc[(cov.analysis == "main") & (cov.model == model)]
@@ -43,7 +45,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
     axes[0].legend(fontsize=8)
     save(fig, figures/"scores_and_coverage.png")
     fig, ax = plt.subplots(figsize=(8, 4))
-    for index, model in enumerate(MODELS[1:]):
+    for index, model in enumerate(models[1:]):
         group = boot.loc[boot.model == model]
         x = group.horizon_days.to_numpy()+.15*(index-1)
         ax.plot(x, group.delta_mae, "o", label=LABELS[model])
@@ -75,7 +77,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
                       & joined.fit_success & np.isfinite(joined.prediction)].copy()
     main["absolute_error"] = (main.prediction-main.target_volume).abs()
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-    for model in MODELS:
+    for model in models:
         group = main.loc[main.model == model]
         for ax, column in zip(axes, ["n_context", "context_days"], strict=True):
             ax.scatter(group[column], group.absolute_error, s=8, alpha=.25, label=LABELS[model])
@@ -87,6 +89,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
     examples = pd.read_csv(run/"examples.csv", dtype={"study": str, "animal_id": str})
     examples = examples.loc[examples.partition == partition]
     normalized = normalize(raw)
+    quantiles = pd.read_csv(folder/"quantiles.csv") if enabled(cfg) else pd.DataFrame()
     n = len(examples)
     fig, axes = plt.subplots(max(1, (n+2)//3), min(3, max(1, n)), squeeze=False,
                              figsize=(15, 4*max(1, (n+2)//3)))
@@ -101,12 +104,20 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
         if not forecasts.empty:
             t0 = forecasts.t0.min()
             ax.axvline(t0, color="black", ls="--", lw=.8)
-            for model in MODELS:
+            for model in models:
                 group = forecasts.loc[(forecasts.t0 == t0) & (forecasts.model == model)]
                 ax.plot(group.target_day, group.prediction, "o", ms=4, label=LABELS[model])
                 if not group.fit_success.all():
-                    ax.text(.02, .95-.06*MODELS.index(model), LABELS[model]+" : échec",
+                    ax.text(.02, .95-.06*models.index(model), LABELS[model]+" : échec",
                             transform=ax.transAxes, fontsize=7)
+            if not quantiles.empty:
+                origin_ids = forecasts.loc[forecasts.t0 == t0, "origin_id"].unique()
+                band = quantiles.loc[quantiles.origin_id.isin(origin_ids)].pivot(
+                    index="target_day", columns="level", values="value")
+                if .1 in band and .9 in band:
+                    valid = np.isfinite(band.to_numpy()).all(axis=1) & (np.diff(band.to_numpy(), axis=1) >= 0).all(axis=1)
+                    ax.fill_between(band.index, band[.1], band[.9], where=valid, alpha=.15,
+                                    label="Timestral : intervalle brut à 80 %")
         ax.plot(trace.day, trace.tumour_volume.where(trace.analysis_eligible), ".-",
                 color="gray", lw=.8, label="Observations")
         ax.set(title=f"{animal.study} · {animal.animal_id} · {animal.treatment}",
@@ -123,7 +134,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
     fraction = common_count/total if total else 0.
     n_animals = int(primary.n_animals.iloc[0]) if len(primary) else 0
     eligible = (n_animals >= cfg["bootstrap_min_animals"] and fraction >= cfg["min_common_coverage"]
-                and len(primary_cov) == 4 and primary_cov.coverage.ge(cfg["min_model_coverage"]).all())
+                and len(primary_cov) == len(models) and primary_cov.coverage.ge(cfg["min_model_coverage"]).all())
     conclusion = ("Les seuils de couverture et d'effectif sont satisfaits ; comparer les différences "
                   "appariées et leurs intervalles exploratoires avant toute affirmation de supériorité."
                   if eligible else "Comparaison insuffisamment robuste pour déclarer un gagnant selon "
@@ -139,6 +150,69 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
     table = table[["Horizon (jours)", "Modèle", "Animaux", "Couples",
                    "Erreur absolue (mm³)", "Erreur quadratique (mm³)"]].round(3)
     relative_glossary = "../glossary.md"
+    timestral_section = ""
+    if enabled(cfg):
+        probability = pd.read_csv(folder/"probabilistic_scores.csv")
+        probability = probability.loc[probability.analysis == "main"]
+        fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+        for nominal, group in probability.groupby("nominal"):
+            label = f"Intervalle nominal à {nominal:.0%}"
+            axes[0].plot(group.horizon_days, 100*group.interval_coverage, "o-", label=label)
+            axes[0].axhline(100*nominal, ls=":", lw=.8)
+            axes[1].plot(group.horizon_days, group.mean_width, "o-", label=label)
+        axes[0].set(xlabel="Horizon exact (jours)", ylabel="Couverture par animal (%)", ylim=(-2, 102))
+        axes[1].set(xlabel="Horizon exact (jours)", ylabel="Largeur moyenne par animal (mm³)")
+        if len(probability):
+            axes[0].legend(fontsize=8)
+            axes[1].legend(fontsize=8)
+        save(fig, figures/"timestral_intervals.png")
+        raw = joined.loc[joined.model == "timestral"]
+        negatives = int(raw.prediction.lt(0).sum())
+        comparison = pd.read_csv(folder/"main_common_vs_gompertz_bootstrap.csv")
+        comparison = comparison.loc[(comparison.model == "timestral") &
+                                    (comparison.horizon_days == cfg["primary_horizon"])]
+        comparison = comparison[["model", "n_animals", "delta_mae", "delta_low", "delta_high"]].rename(
+            columns={"model": "Modèle", "n_animals": "Animaux", "delta_mae": "Différence moyenne (mm³)",
+                     "delta_low": "Borne basse à 95 %", "delta_high": "Borne haute à 95 %"})
+        readable_probability = probability.rename(columns={"analysis": "Analyse", "horizon_days": "Horizon (jours)",
+            "nominal": "Niveau nominal", "n_animals": "Animaux", "n_pairs": "Couples",
+            "pinball": "Score de quantiles (mm³)", "interval_coverage": "Couverture observée",
+            "mean_width": "Largeur moyenne (mm³)", "negative_quantile_fraction": "Fraction de quantiles négatifs"})
+        timestral_section = f"""
+## Extension exploratoire Timestral
+
+Les résultats classiques avaient déjà été consultés avant cette extension :
+il ne s'agit pas d'un nouveau test externe aveugle. Poids figés, aucun entraînement
+ni recalibrage externe. Révisions et empreintes figurent dans la provenance.
+
+Les grilles quotidiennes dans grids.csv gardent les absences et leur masque.
+Le modèle officiel propage cependant les valeurs précédentes en interne.
+La médiane brute est comparée aux quatre modèles sur le support commun à cinq ;
+main_classic_scores.csv conserve séparément le support commun aux quatre références.
+Les prévisions finies négatives restent scorées : {negatives} sur {len(raw)} demandes,
+tous contextes et horizons confondus, y compris sans cible. Elles ne sont pas
+biologiquement admissibles ; aucune troncature ni exclusion opportuniste n'est appliquée.
+Une médiane finie reste scorable même si d'autres quantiles sont invalides.
+
+Différence appariée de l'erreur absolue moyenne Timestral moins Gompertz à sept jours,
+en mm³ ; les intervalles sont exploratoires et absents sous dix animaux :
+
+{_table_markdown(comparison.round(3))}
+
+![Couverture et largeur des intervalles bruts](figures/timestral_intervals.png)
+
+{_table_markdown(readable_probability.round(3))}
+
+Le score de [quantiles]({relative_glossary}#quantile)
+([pinball loss]({relative_glossary}#pinball-loss)), la couverture et la largeur
+sont moyennés par animal. Seuls les 21 quantiles finis et ordonnés sont évalués
+comme distribution ; les quantiles négatifs sont conservés. Les échecs et
+croisements restent dans timestral_diagnostics.json. quantiles.csv conserve les
+sorties aux dates demandées, daily_quantiles.csv l'ensemble des quatorze jours.
+Aucun intervalle artificiel n'est attribué aux modèles déterministes.
+Le corpus de préentraînement peut contenir des données apparentées ; l'absence
+de recouvrement avec INSPECTumours n'est pas démontrée.
+"""
     report = f"""# TumorTwin — Modèles de référence : {partition}
 
 [Glossaire local]({relative_glossary}) · [Protocole figé](../protocol.md) · [Provenance](../provenance.json)
@@ -149,7 +223,7 @@ def write_report(joined: pd.DataFrame, raw: pd.DataFrame, folder: Path, run: Pat
 
 À 7 jours : {total} couples origine/cible scorables ; {common_count} sur le support
 commun ({fraction:.1%}), représentant {n_animals} animaux. La couverture individuelle
-est dans coverage.csv. Les mêmes couples sont utilisés pour les quatre modèles.
+est dans coverage.csv. Les mêmes couples sont utilisés pour les {len(models)} modèles.
 
 {_table_markdown(table)}
 
@@ -164,6 +238,8 @@ en cas d'échec ; sa fréquence est indiquée. Aucun échec ne disparaît du reg
 ![Scores et couverture](figures/scores_and_coverage.png)
 
 ![Différences appariées](figures/paired_differences.png)
+
+{timestral_section}
 
 Les intervalles des différences proviennent de tirages d'animaux appariés et
 stratifiés par étude. Ils sont exploratoires, absents sous dix animaux, et

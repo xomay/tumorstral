@@ -91,6 +91,26 @@ six past measurements. The human experiment instead evaluates the next observed
 visits at their actual dates. These protocols address different questions and
 their scores should not be pooled.
 
+To add zero-shot Timestral on the **same preclinical animals, histories and exact
+targets**, use the dedicated configuration:
+
+```sh
+uv sync --locked --extra timestral
+uv run --extra timestral tumortwin baselines download-model --config configs/preclinical_timestral.toml
+uv run --extra timestral tumortwin baselines split --config configs/preclinical_timestral.toml
+uv run --extra timestral tumortwin baselines develop --config configs/preclinical_timestral.toml
+uv run --extra timestral tumortwin baselines freeze --config configs/preclinical_timestral.toml
+uv run --extra timestral tumortwin baselines evaluate --config configs/preclinical_timestral.toml
+```
+
+Freeze requires committed code and completed development. Inference then runs
+offline with verified local weights. Outputs stay in `reports/preclinical_timestral/`;
+the original four-model configuration is preserved. Reports compare all five
+models on common targets, retain raw negative Timestral outputs, and include
+paired differences against persistence and Gompertz plus interval diagnostics.
+This is an exploratory extension made after the classical results were inspected;
+see the [extension protocol](docs/preclinical_timestral_protocol.md).
+
 ## Data and scientific assumptions
 
 | Source | Measurements | Target and time scale |

@@ -46,6 +46,46 @@ réexécuter ce cycle avec la configuration modifiée, avant les scores de test.
 
 ## Lire les sorties
 
+### Ajouter Timestral sans changer l'expérience classique
+
+La configuration `configs/preclinical_timestral.toml` active Timestral et conserve
+les mêmes animaux, origines et horizons. Le [protocole de l'extension](preclinical_timestral_protocol.md)
+précise son caractère exploratoire, les sorties brutes et le remplissage interne.
+
+```sh
+uv sync --locked --extra timestral
+uv run --extra timestral tumortwin baselines download-model --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumortwin baselines split --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumortwin baselines develop --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumortwin baselines freeze --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumortwin baselines evaluate --config configs/preclinical_timestral.toml
+```
+
+Les sorties sont dans `reports/preclinical_timestral/<empreinte>/`. Le gel exige
+un dépôt propre et versionné après développement. Les poids locaux et le code
+installé sont vérifiés avant de calculer l'identité de l'expérience ; l'inférence
+ne télécharge aucun fichier. Les fichiers supplémentaires sont :
+
+| Fichier | Contenu |
+| --- | --- |
+| main_classic_scores.csv | Support commun aux quatre références, conservé séparément |
+| main_common_scores.csv | Support commun aux cinq modèles |
+| main_common_vs_gompertz_bootstrap.csv | Différences appariées à Gompertz |
+| grids.csv | Grilles quotidiennes du passé avec absences et masques |
+| quantiles.csv | 21 quantiles bruts aux trois dates demandées |
+| daily_quantiles.csv | 21 quantiles bruts pour chacun des quatorze jours futurs |
+| timestral_diagnostics.json | Erreurs d'inférence, densité, sorties négatives et quantiles croisés |
+| probabilistic_scores.csv | Couverture, largeur et score de quantiles, pondérés par animal |
+| pinball_by_level.csv | Score par niveau de quantile |
+
+Les médianes finies négatives restent dans les scores, avec comptage explicite.
+Les quantiles invalides n'empêchent pas de scorer une médiane finie ; ils excluent
+uniquement les scores probabilistes correspondants. Les distributions négatives
+finies et ordonnées restent évaluées et signalées. Les quatre modèles classiques
+conservent leurs règles de validité et leurs réglages numériques.
+
+### Sorties communes
+
 Dans `reports/baselines/<empreinte>/` :
 
 | Fichier | Usage |

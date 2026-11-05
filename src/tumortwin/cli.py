@@ -21,8 +21,8 @@ def main() -> None:
     eda.add_argument("--input", type=Path)
     eda.add_argument("--processed", type=Path)
     eda.add_argument("--reports", type=Path)
-    baselines = commands.add_parser("baselines", help="Evaluate individual growth models on preclinical trajectories")
-    baselines.add_argument("action", choices=["split", "develop", "freeze", "evaluate"])
+    baselines = commands.add_parser("baselines", help="Preclinical growth models and optional zero-shot Timestral")
+    baselines.add_argument("action", choices=["download-model", "split", "develop", "freeze", "evaluate"])
     baselines.add_argument("--config", type=Path, default=Path("configs/baselines.toml"))
     human = commands.add_parser("human", help="Human Laleh baselines and zero-shot Timestral")
     human.add_argument("action", choices=["download", "audit", "split", "develop", "freeze", "evaluate"])
@@ -59,7 +59,15 @@ def main() -> None:
         if args.command == "baselines":
             from .evaluation.experiment import freeze, prepare, run_partition
 
-            if args.action == "split":
+            if args.action == "download-model":
+                from .timestral.download import download_model
+
+                cfg = tomllib.loads(args.config.read_text())
+                root = (args.config.resolve().parent/cfg["project_root"]).resolve()
+                if not cfg.get("timestral", {}).get("enabled", False):
+                    raise ValueError("Select a configuration with Timestral enabled")
+                print(download_model(root/cfg["timestral"]["local_model"]))
+            elif args.action == "split":
                 _, run, _, split, _ = prepare(args.config)
                 print(json.dumps({"run": str(run), "partitions": split.partition.value_counts().to_dict()}))
             elif args.action == "freeze":

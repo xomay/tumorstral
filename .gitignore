@@ -24,6 +24,7 @@ reports/figures/
 reports/phase2/
 reports/baselines/
 reports/human/
+reports/preclinical_timestral/
 
 # Local credentials, app metadata and editor files.
 .env

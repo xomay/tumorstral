@@ -147,8 +147,13 @@ def test_matched_horizons_and_short_cohorts():
     assert len(supports(short, [3, 7, 14])["short_matched"]) == 36
 
 
-def test_miniature_pipeline_freeze_and_integrity(tmp_path):
+@pytest.mark.parametrize("with_timestral", [False, True])
+def test_miniature_pipeline_freeze_and_integrity(tmp_path, monkeypatch, with_timestral):
     raw = synthetic_animals()
+    if with_timestral:
+        # Explicitly synthetic saturating trajectories keep all four fits identifiable enough
+        # for the five-model common-support assertion within this test's small solver budget.
+        raw["tumour_volume"] = 80*np.exp(np.log((10+raw.animal_id.astype(int))/80)*np.exp(-.1*raw.day))
     raw.to_csv(tmp_path/"synthetic.csv", index=False)
     (tmp_path/"protocol.md").write_text("Synthetic offline test protocol")
     (tmp_path/".gitignore").write_text("output/\n")
@@ -161,6 +166,15 @@ def test_miniature_pipeline_freeze_and_integrity(tmp_path):
     config = config.replace('rate_starts = [0.01, 0.1, 0.5]', 'rate_starts = [0.1]')
     config = config.replace('capacity_factors = [0.5, 1.0, 2.0, 10.0]', 'capacity_factors = [2.0]')
     config = config.replace('max_nfev = 2000', 'max_nfev = 100')
+    if with_timestral:
+        from test_timestral import FakeForecaster
+        from tumortwin.timestral import TimestralAdapter
+
+        config += '\n[timestral]\nenabled = true\ngrid_step_days = 1.0\n'
+        monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.model_provenance",
+                            lambda cfg, root: {"synthetic": True})
+        monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.load_adapter",
+                            lambda cfg, root: TimestralAdapter(FakeForecaster(), model_revision="synthetic"))
     path = tmp_path/"baselines.toml"
     path.write_text(config)
     for args in [["init", "-b", "main"], ["add", "."],
@@ -183,6 +197,17 @@ def test_miniature_pipeline_freeze_and_integrity(tmp_path):
     forecasts = pd.read_csv(final/"predictions.csv")
     assert "target_volume" not in forecasts
     assert "target_volume" in pd.read_csv(final/"scored_registry.csv")
+    if with_timestral:
+        assert set(forecasts.model) == {*MODELS, "timestral"}
+        scores = pd.read_csv(final/"main_common_scores.csv")
+        assert set(scores.model) == {*MODELS, "timestral"}
+        for _, group in scores.groupby("horizon_days"):
+            assert group.n_pairs.nunique() == 1
+        assert len(pd.read_csv(final/"main_classic_scores.csv")) > 0
+        assert set(pd.read_csv(final/"probabilistic_scores.csv").nominal.round(1)) == {.8, .9}
+        assert (final/"figures/timestral_intervals.png").stat().st_size > 1000
+        assert (run/"glossary.md").exists()
+        assert "extension" in (final/"report.md").read_text().lower()
     assert run_partition(path, "development") == develop
     (final/"predictions.csv").write_text("tampered")
     with pytest.raises(ValueError, match="artifact changed"):

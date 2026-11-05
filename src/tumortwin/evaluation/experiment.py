@@ -19,6 +19,7 @@ from ..baselines import MODELS, FitResult, fit_model
 from ..data.inspectumours import IDENTITY, load_raw, sha256
 from .design import Origin, build_origins, digest, join_targets, make_split, target_registry
 from .metrics import coverage, paired_bootstrap, summarize, supports
+from .preclinical_timestral import enabled, model_names
 
 
 def clean(value: object) -> object:
@@ -96,8 +97,17 @@ def load_experiment(config_path: Path) -> tuple[dict, Path, Path, pd.DataFrame, 
                       python=platform.python_version(),
                       packages={p: metadata.version(p) for p in
                                 ["tumortwin", "numpy", "pandas", "scipy", "matplotlib"]})
+    if enabled(cfg):
+        from .preclinical_timestral import model_provenance
+
+        provenance["timestral"] = model_provenance(cfg, root)
+        if "reference_protocol" in cfg:
+            provenance["reference_protocol_sha256"] = sha256(root/cfg["reference_protocol"])
     identity = {k: provenance[k] for k in ["source_sha256", "config_sha256", "protocol_sha256",
                                          "code_sha256", "git_commit", "working_tree_dirty", "packages", "python"]}
+    if enabled(cfg):
+        identity["timestral"] = provenance["timestral"]
+        identity["reference_protocol_sha256"] = provenance.get("reference_protocol_sha256")
     run = output/digest(identity)[:20]
     raw = load_raw(source).reset_index(drop=True)
     raw["_source_row"] = np.arange(1, len(raw)+1)
@@ -114,13 +124,18 @@ def prepare(config_path: Path) -> tuple[dict, Path, pd.DataFrame, pd.DataFrame, 
         "../src/tumortwin/glossary.md", "glossary.md"))
     immutable(run/"config.toml", config_path.read_text(encoding="utf-8"))
     immutable(run/"glossary.md", files("tumortwin").joinpath("glossary.md").read_text(encoding="utf-8"))
+    design_files = ["split.csv", "provenance.json", "protocol.md", "config.toml", "glossary.md", "examples.csv"]
+    if enabled(cfg) and "reference_protocol" in cfg:
+        root = (config_path.resolve().parent/cfg.get("project_root", "..")).resolve()
+        immutable(run/"preclinical_protocol.md", (root/cfg["reference_protocol"]).read_text().replace(
+            "../src/tumortwin/glossary.md", "glossary.md"))
+        design_files.append("preclinical_protocol.md")
     # Choose examples using identity and allocation hash before calculating any errors.
     examples = (split.sort_values("allocation_hash").groupby(["partition", "study", "treatment"])
                 .head(1).sort_values(["partition", *IDENTITY]))
     immutable(run/"examples.csv", examples.to_csv(index=False))
     immutable(run/"design_manifest.json", json_text({
-        name: sha256(run/name) for name in ["split.csv", "provenance.json", "protocol.md",
-                                            "config.toml", "glossary.md", "examples.csv"]}))
+        name: sha256(run/name) for name in design_files}))
     return cfg, run, raw, split, provenance
 
 
@@ -145,9 +160,14 @@ def forecast_origin(job: tuple[Origin, dict]) -> tuple[list[dict], list[dict]]:
 
 
 def _export_scores(joined: pd.DataFrame, folder: Path, cfg: dict) -> None:
+    models = model_names(cfg)
     coverage(joined).to_csv(folder/"coverage.csv", index=False)
     for analysis in sorted(joined.analysis.unique()):
-        frames = supports(joined.loc[joined.analysis == analysis], cfg["horizons"])
+        section = joined.loc[joined.analysis == analysis]
+        frames = supports(section, cfg["horizons"], models)
+        if enabled(cfg):
+            classic = supports(section.loc[section.model.isin(MODELS)], cfg["horizons"])["common"]
+            summarize(classic)[0].to_csv(folder/f"{analysis}_classic_scores.csv", index=False)
         for name, frame in frames.items():
             if name == "short_matched":
                 continue
@@ -156,8 +176,12 @@ def _export_scores(joined: pd.DataFrame, folder: Path, cfg: dict) -> None:
             individual.to_csv(folder/f"{analysis}_{name}_animals.csv", index=False)
             if name in {"common", "fallback", "common_horizons"}:
                 paired_bootstrap(individual, cfg["bootstrap_samples"], cfg["seed"],
-                                 cfg["bootstrap_min_animals"]).to_csv(
+                                 cfg["bootstrap_min_animals"], models=models).to_csv(
                     folder/f"{analysis}_{name}_bootstrap.csv", index=False)
+                if enabled(cfg) and name == "common":
+                    paired_bootstrap(individual, cfg["bootstrap_samples"], cfg["seed"],
+                        cfg["bootstrap_min_animals"], models=models, reference="gompertz").to_csv(
+                        folder/f"{analysis}_common_vs_gompertz_bootstrap.csv", index=False)
         subgroup_rows = []
         for (study, treatment), sub in frames["common"].groupby(["study", "treatment"]):
             scores, _ = summarize(sub)
@@ -166,7 +190,7 @@ def _export_scores(joined: pd.DataFrame, folder: Path, cfg: dict) -> None:
         (pd.concat(subgroup_rows, ignore_index=True) if subgroup_rows else pd.DataFrame(
             columns=["study", "treatment", "model", "horizon_days", "n_animals"])).to_csv(
                 folder/f"{analysis}_subgroups.csv", index=False)
-    matched = supports(joined, cfg["horizons"])["short_matched"]
+    matched = supports(joined, cfg["horizons"], models)["short_matched"]
     for analysis, frame in matched.groupby("analysis"):
         scores, individual = summarize(frame)
         scores.to_csv(folder/f"{analysis}_matched_scores.csv", index=False)
@@ -211,6 +235,13 @@ def run_partition(config_path: Path, partition: str) -> Path:
     finally:
         if executor:
             executor.shutdown(wait=True, cancel_futures=True)
+    quantiles = None
+    if enabled(cfg):
+        from .preclinical_timestral import forecast_partition
+
+        root = (config_path.resolve().parent/cfg.get("project_root", "..")).resolve()
+        records, quantiles = forecast_partition(origins, cfg, root, folder)
+        all_predictions.extend(records)
     forecasts = pd.DataFrame(all_predictions)
     # Persist forecasts before constructing or joining any future target volumes.
     forecasts.to_csv(folder/"predictions.csv", index=False)
@@ -219,6 +250,10 @@ def run_partition(config_path: Path, partition: str) -> Path:
     joined = join_targets(forecasts, targets)
     joined.to_csv(folder/"scored_registry.csv", index=False)
     _export_scores(joined, folder, cfg)
+    if quantiles is not None:
+        from .preclinical_timestral import export_quantile_scores
+
+        export_quantile_scores(quantiles, joined, folder)
     from .report import write_report
 
     write_report(joined, subset, folder, run, cfg, partition)
