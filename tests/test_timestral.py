@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import pytest
 
-from tumortwin.timestral import QUANTILE_LEVELS, TimestralAdapter, prepare_grid
+from tumorstral.timestral import QUANTILE_LEVELS, TimestralAdapter, prepare_grid
 
 
 class FakeForecaster:

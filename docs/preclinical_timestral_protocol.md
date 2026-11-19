@@ -12,7 +12,7 @@ La clé est `(study, animal_id)`. Même graine `20261103`, même répartition
 104 animaux de développement / 26 de test, mêmes origines principales avec au
 moins six mesures exploitables, mêmes analyses séparées à trois, quatre et cinq
 mesures. Les horizons exacts restent 3, 7 et 14 jours ; le critère principal est
-l'[erreur absolue moyenne](../src/tumortwin/glossary.md#mae) à sept jours.
+l'[erreur absolue moyenne](../src/tumorstral/glossary.md#mae) à sept jours.
 Les jours réels après implantation et les volumes en mm³ sont conservés.
 Aucune cible n'est interpolée et aucun volume futur n'entre dans une prévision.
 
@@ -31,16 +31,16 @@ sous dix animaux. Les cohortes diffèrent entre horizons.
 
 ## Inférence figée
 
-Timestral-5M est utilisé en [zero-shot](../src/tumortwin/glossary.md#zero-shot),
+Timestral-5M est utilisé en [zero-shot](../src/tumorstral/glossary.md#zero-shot),
 sans entraînement, fine-tuning, calibration externe ni recherche de réglages.
 Code officiel : `a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff` ; poids :
 `bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f`. Les empreintes
-[SHA-256](../src/tumortwin/glossary.md#sha-256) des poids locaux sont vérifiées
+[SHA-256](../src/tumorstral/glossary.md#sha-256) des poids locaux sont vérifiées
 avant toute inférence ; aucun téléchargement implicite pendant l'évaluation.
 Les versions de Timestral et PyTorch entrent dans l'identité de l'expérience.
 
 Le modèle reçoit les volumes originaux du seul préfixe sur une grille quotidienne.
-Les jours sans mesure restent absents avec masque, sans imputation par TumorTwin.
+Les jours sans mesure restent absents avec masque, sans imputation par tumorstral.
 Le modèle officiel propage toutefois les valeurs antérieures en interne ; il
 conserve le masque et peut compléter les blocs d'entrée avec des zéros masqués.
 Cette hypothèse est explicite dans les diagnostics. La symétrisation officielle
@@ -50,7 +50,7 @@ Les 21 quantiles quotidiens bruts et les sorties négatives sont conservés.
 La médiane finie est évaluée même si d'autres quantiles sont invalides. Les scores
 probabilistes exigent les 21 quantiles finis et ordonnés ; les échecs et croisements
 restent journalisés. Couverture et largeur des intervalles 80 % (10–90 %) et 90 %
-(5–95 %), et [pinball loss](../src/tumortwin/glossary.md#pinball-loss), sont
+(5–95 %), et [pinball loss](../src/tumorstral/glossary.md#pinball-loss), sont
 moyennées par animal, séparément pour chaque analyse et horizon. Ces scores
 utilisent les cibles exploitables de Timestral, dont l'effectif est publié ; ils
 ne dépendent pas de la convergence des références. Aucun intervalle n'est inventé

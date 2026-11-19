@@ -160,7 +160,7 @@ def design(config: Path) -> tuple[dict, Path, pd.DataFrame, dict, pd.DataFrame]:
     split = patient_split(frame, cfg["seed"], cfg["test_fraction"])
     immutable(run/"provenance.json", json_text(provenance))
     immutable(run/"split.csv", split.to_csv(index=False))
-    immutable(run/"protocol.md", (root/cfg["protocol"]).read_text().replace("../src/tumortwin/glossary.md", "glossary.md"))
+    immutable(run/"protocol.md", (root/cfg["protocol"]).read_text().replace("../src/tumorstral/glossary.md", "glossary.md"))
     chosen = split.loc[split.partition.isin(["test", "development"])].sort_values("allocation_hash")
     examples = chosen.groupby(["partition", "study", "treatment"], sort=True).head(1)
     immutable(run/"examples.csv", examples.to_csv(index=False))

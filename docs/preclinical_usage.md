@@ -6,17 +6,17 @@ ne doit être choisi à partir des scores de test.
 ## Reproduire une expérience
 
 Installer les dépendances avec `uv sync --locked` et récupérer les données
-avec `uv run tumortwin download`. Le dépôt doit être propre et committé pour
+avec `uv run tumorstral download`. Le dépôt doit être propre et committé pour
 figer une expérience. La configuration est `configs/baselines.toml` ; les chemins
 sont relatifs à sa racine de projet.
 
 ```sh
 export UV_CACHE_DIR="$PWD/.uv-cache"
 export MPLCONFIGDIR="$PWD/.cache/matplotlib"
-uv run --offline tumortwin baselines split
-uv run --offline tumortwin baselines develop
-uv run --offline tumortwin baselines freeze
-uv run --offline tumortwin baselines evaluate
+uv run --offline tumorstral baselines split
+uv run --offline tumorstral baselines develop
+uv run --offline tumorstral baselines freeze
+uv run --offline tumorstral baselines evaluate
 ```
 
 Quatre processus calculent des origines indépendantes ; la sélection des
@@ -54,11 +54,11 @@ précise son caractère exploratoire, les sorties brutes et le remplissage inter
 
 ```sh
 uv sync --locked --extra timestral
-uv run --extra timestral tumortwin baselines download-model --config configs/preclinical_timestral.toml
-uv run --offline --extra timestral tumortwin baselines split --config configs/preclinical_timestral.toml
-uv run --offline --extra timestral tumortwin baselines develop --config configs/preclinical_timestral.toml
-uv run --offline --extra timestral tumortwin baselines freeze --config configs/preclinical_timestral.toml
-uv run --offline --extra timestral tumortwin baselines evaluate --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines download-model --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumorstral baselines split --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumorstral baselines develop --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumorstral baselines freeze --config configs/preclinical_timestral.toml
+uv run --offline --extra timestral tumorstral baselines evaluate --config configs/preclinical_timestral.toml
 ```
 
 Les sorties sont dans `reports/preclinical_timestral/<empreinte>/`. Le gel exige
@@ -119,8 +119,8 @@ Dans les sous-dossiers `development/` et `test/` :
 | report.md et figures/ | Bilan lisible, exemples prédéfinis et diagnostics |
 | complete.json | Empreintes des sorties ; une altération bloque leur réutilisation |
 
-Les métriques [MAE](../src/tumortwin/glossary.md#mae) et
-[RMSE](../src/tumortwin/glossary.md#rmse) sont en mm³. Le biais positif indique
+Les métriques [MAE](../src/tumorstral/glossary.md#mae) et
+[RMSE](../src/tumorstral/glossary.md#rmse) sont en mm³. Le biais positif indique
 une surestimation. L'erreur relative est une fraction, uniquement pour les
 cibles strictement positives ; sa médiane est calculée par animal puis entre
 animaux. Les intervalles appariés donnent la différence à persistance : une

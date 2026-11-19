@@ -1,6 +1,6 @@
 # Documentation
 
-TumorTwin fournit une chaîne reproductible de chargement, contrôle qualité,
+tumorstral fournit une chaîne reproductible de chargement, contrôle qualité,
 prévision individuelle et comparaison aux observations. Les données
 précliniques et humaines utilisent des protocoles distincts pour conserver
 leurs dates, leurs unités et leurs limites d'interprétation.
@@ -17,7 +17,7 @@ leurs dates, leurs unités et leurs limites d'interprétation.
 | Résultats Timestral sur INSPECTumours | [Comparaison aux quatre références](preclinical_timestral_results.md) |
 | Trajectoires humaines et Timestral | [Protocole humain](human_protocol.md) |
 | Résultats Laleh et graphiques | [Résultats humains](human_results.md) |
-| Définitions et unités | [Glossaire](../src/tumortwin/glossary.md) |
+| Définitions et unités | [Glossaire](../src/tumorstral/glossary.md) |
 
 Les résultats présentés sont des expériences de référence, accompagnées de
 leurs effectifs, paramètres et empreintes de provenance. Les jeux bruts et

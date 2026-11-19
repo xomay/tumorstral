@@ -7,9 +7,9 @@ import sys
 import pandas as pd
 import pytest
 
-from tumortwin.data.inspectumours import sha256
-from tumortwin.data.quality import normalize
-from tumortwin.eda import run_eda, treatment_time_summary
+from tumorstral.data.inspectumours import sha256
+from tumorstral.data.quality import normalize
+from tumorstral.eda import run_eda, treatment_time_summary
 
 
 def test_summaries_at_actual_dates(sample):
@@ -26,7 +26,7 @@ def test_complete_offline_pipeline_and_cli(tmp_path, sample):
     config = tmp_path / "exploration.toml"
     config.write_text('project_root = "."\ninput = "synthetic.csv"\n'
                       'processed = "processed"\nreports = "reports"\n')
-    result = subprocess.run([sys.executable, "-m", "tumortwin.cli", "eda",
+    result = subprocess.run([sys.executable, "-m", "tumorstral.cli", "eda",
                              "--config", str(config)], capture_output=True, text=True,
                              env={**os.environ, "MPLCONFIGDIR": str(tmp_path / "mpl")})
     assert result.returncode == 0, result.stderr

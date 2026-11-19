@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tumortwin"
+name = "tumorstral"
 version = "0.1.0"
 description = "Reproducible tumour growth forecasting with mechanistic baselines and zero-shot Timestral"
 readme = "README.md"
@@ -24,7 +24,7 @@ dependencies = [
 dev = ["pytest>=8.3"]
 
 [project.scripts]
-tumortwin = "tumortwin.cli:main"
+tumorstral = "tumorstral.cli:main"
 
 [project.urls]
 Repository = "https://github.com/xomay/tumortwin"

@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tumortwin.evaluation.human import landmarks, patient_split, baseline_job, design, run_human, freeze_human
-from tumortwin.evaluation.probabilistic import point_scores, quantile_scores, paired_patient_bootstrap
-from tumortwin.timestral.adapter import QUANTILE_LEVELS
+from tumorstral.evaluation.human import landmarks, patient_split, baseline_job, design, run_human, freeze_human
+from tumorstral.evaluation.probabilistic import point_scores, quantile_scores, paired_patient_bootstrap
+from tumorstral.timestral.adapter import QUANTILE_LEVELS
 
 
 def synthetic(n=10):

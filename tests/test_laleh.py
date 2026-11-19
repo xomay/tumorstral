@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tumortwin.data.laleh import FILENAME, SOURCE_COLUMNS, download_laleh, load_laleh
+from tumorstral.data.laleh import FILENAME, SOURCE_COLUMNS, download_laleh, load_laleh
 
 
 def write_fixture(path: Path, sheets: dict[str, pd.DataFrame]) -> Path:
@@ -99,14 +99,14 @@ def test_provenance_changes_rejected(tmp_path, synthetic):
 def test_download_is_pinned_cached_and_immutable(tmp_path, monkeypatch):
     payload = b"explicitly synthetic download fixture"
     expected = hashlib.sha256(payload).hexdigest()
-    monkeypatch.setattr("tumortwin.data.laleh.EXPECTED_SHA256", expected)
+    monkeypatch.setattr("tumorstral.data.laleh.EXPECTED_SHA256", expected)
     calls = []
 
     def fetch(url, timeout):
         calls.append(url)
         return io.BytesIO(payload)
 
-    monkeypatch.setattr("tumortwin.data.laleh.urlopen", fetch)
+    monkeypatch.setattr("tumorstral.data.laleh.urlopen", fetch)
     path = download_laleh(tmp_path)
     assert path.name == FILENAME and path.read_bytes() == payload
     assert len(calls) == 1
@@ -120,7 +120,7 @@ def test_download_is_pinned_cached_and_immutable(tmp_path, monkeypatch):
 
 
 def test_wrong_download_never_writes_a_workbook(tmp_path, monkeypatch):
-    monkeypatch.setattr("tumortwin.data.laleh.urlopen", lambda *a, **kw: io.BytesIO(b"unexpected"))
+    monkeypatch.setattr("tumorstral.data.laleh.urlopen", lambda *a, **kw: io.BytesIO(b"unexpected"))
     with pytest.raises(ValueError, match="SHA-256"):
         download_laleh(tmp_path)
     assert not (tmp_path/FILENAME).exists()

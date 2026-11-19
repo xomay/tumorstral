@@ -118,7 +118,7 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
     animals = animal_summary(df)
     quality = quality_report(df, animals)
     versions = {name: importlib.metadata.version(name)
-                for name in ["tumortwin", "numpy", "pandas", "matplotlib", "rdata"]}
+                for name in ["tumorstral", "numpy", "pandas", "matplotlib", "rdata"]}
     provenance = {
         "source": str(source.resolve()), "sha256": sha256(source),
         "source_columns": list(raw.columns),
@@ -136,7 +136,7 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
             provenance["upstream"] = upstream
     for folder in [processed, reports]:
         folder.mkdir(parents=True, exist_ok=True)
-    glossary = files("tumortwin").joinpath("glossary.md").read_text(encoding="utf-8")
+    glossary = files("tumorstral").joinpath("glossary.md").read_text(encoding="utf-8")
     (reports / "glossary.md").write_text(glossary, encoding="utf-8")
     df.to_csv(processed / "observations.csv", index=False)
     animals.to_csv(processed / "animals.csv", index=False)
@@ -160,7 +160,7 @@ def run_eda(source: Path, processed: Path, reports: Path) -> dict:
     groups.to_csv(reports / "treatment_summary.csv", index=False)
     make_figures(df, animals, reports / "figures")
     flags = pd.DataFrame(quality["row_flags"].items(), columns=["Indicateur (lignes)", "Effectif"])
-    report = f"""# TumorTwin — Analyse exploratoire
+    report = f"""# tumorstral — Analyse exploratoire
 
 [Glossaire des acronymes](glossary.md) — définitions accessibles hors réseau.
 

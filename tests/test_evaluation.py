@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tumortwin.baselines import MODELS
-from tumortwin.evaluation.design import build_origins, join_targets, make_split, target_registry
-from tumortwin.evaluation.experiment import forecast_origin, freeze, prepare, run_partition, verify_stage
-from tumortwin.evaluation.metrics import animal_scores, paired_bootstrap, summarize, supports
+from tumorstral.baselines import MODELS
+from tumorstral.evaluation.design import build_origins, join_targets, make_split, target_registry
+from tumorstral.evaluation.experiment import forecast_origin, freeze, prepare, run_partition, verify_stage
+from tumorstral.evaluation.metrics import animal_scores, paired_bootstrap, summarize, supports
 
 
 def synthetic_animals(n=10):
@@ -168,12 +168,12 @@ def test_miniature_pipeline_freeze_and_integrity(tmp_path, monkeypatch, with_tim
     config = config.replace('max_nfev = 2000', 'max_nfev = 100')
     if with_timestral:
         from test_timestral import FakeForecaster
-        from tumortwin.timestral import TimestralAdapter
+        from tumorstral.timestral import TimestralAdapter
 
         config += '\n[timestral]\nenabled = true\ngrid_step_days = 1.0\n'
-        monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.model_provenance",
+        monkeypatch.setattr("tumorstral.evaluation.preclinical_timestral.model_provenance",
                             lambda cfg, root: {"synthetic": True})
-        monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.load_adapter",
+        monkeypatch.setattr("tumorstral.evaluation.preclinical_timestral.load_adapter",
                             lambda cfg, root: TimestralAdapter(FakeForecaster(), model_revision="synthetic"))
     path = tmp_path/"baselines.toml"
     path.write_text(config)

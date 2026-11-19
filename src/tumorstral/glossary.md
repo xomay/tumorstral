@@ -1,4 +1,4 @@
-# Glossaire TumorTwin
+# Glossaire tumorstral
 
 Les liens placés sur les acronymes conduisent directement à leur définition.
 Les unités et formules originales sont conservées. Les définitions des mesures
@@ -14,7 +14,7 @@ Elle précède l'ajustement et l'évaluation des prévisions.
 
 **Mean Absolute Error — erreur absolue moyenne.** Moyenne de `abs(prévision − observation)`.
 Elle vaut zéro pour des prévisions exactes ; une valeur plus faible est meilleure.
-Pour les volumes, elle s'exprime en mm³. TumorTwin calcule une moyenne par
+Pour les volumes, elle s'exprime en mm³. tumorstral calcule une moyenne par
 individu puis entre individus pour donner le même poids à chacun.
 
 ## MSE
@@ -33,7 +33,7 @@ Elle est plus sensible aux grandes erreurs que l'erreur absolue moyenne.
 
 **Interquartile Range — écart interquartile.** Différence entre le troisième
 quartile (75 %) et le premier (25 %). L'intervalle interquartile `[Q25, Q75]`
-contient les 50 % centraux des valeurs. Dans les graphiques TumorTwin, les
+contient les 50 % centraux des valeurs. Dans les graphiques tumorstral, les
 barres montrent cet intervalle ; elles ne représentent pas un intervalle de confiance.
 
 ## API
@@ -45,12 +45,12 @@ ou une bibliothèque, par exemple le téléchargement via GitHub.
 ## CLI
 
 **Command-Line Interface — interface en ligne de commande.** Manière d'utiliser
-un programme depuis un terminal, par exemple `uv run tumortwin eda`.
+un programme depuis un terminal, par exemple `uv run tumorstral eda`.
 
 ## CSV
 
 **Comma-Separated Values — valeurs séparées par des virgules.** Format de
-tableau texte ; les fichiers TumorTwin utilisent une ligne d'en-têtes.
+tableau texte ; les fichiers tumorstral utilisent une ligne d'en-têtes.
 
 ## JSON
 
@@ -71,7 +71,7 @@ INSPECTumours contient l'objet `example_data`.
 ## SHA-256
 
 **Secure Hash Algorithm, empreinte de 256 bits.** Produit une empreinte d'un
-contenu. TumorTwin l'utilise pour détecter une modification de fichier et
+contenu. tumorstral l'utilise pour détecter une modification de fichier et
 identifier précisément les données analysées. Une empreinte n'est pas un chiffrement.
 
 ## TCIA

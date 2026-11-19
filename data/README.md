@@ -2,12 +2,12 @@
 
 Les fichiers bruts sont immuables et exclus du suivi Git. Les manifestes
 enregistrent la source, la révision et l'empreinte
-[SHA-256](../src/tumortwin/glossary.md#sha-256). Les datasets conservent leurs
-licences respectives, indépendantes de celle du code TumorTwin.
+[SHA-256](../src/tumorstral/glossary.md#sha-256). Les datasets conservent leurs
+licences respectives, indépendantes de celle du code tumorstral.
 
 ## INSPECTumours
 
-`uv run tumortwin download` récupère le jeu public d'exemple INSPECTumours à une
+`uv run tumorstral download` récupère le jeu public d'exemple INSPECTumours à une
 révision figée, son dictionnaire et sa licence. Les empreintes sont dans
 `raw/provenance.json`. Conserver la licence amont lors d'un partage des données
 ou des tables dérivées. Les fichiers bruts sont ignorés par Git.
@@ -18,7 +18,7 @@ des valeurs manquantes et aucune série synthétique dans les résultats expéri
 
 ## Laleh
 
-`uv run --extra timestral tumortwin human download` récupère le supplément
+`uv run --extra timestral tumorstral human download` récupère le supplément
 original de Laleh et les poids Timestral épinglés. Les sources sont conservées
 sous `raw/laleh/` et `raw/timestral-5m/`, avec leurs manifestes.
 

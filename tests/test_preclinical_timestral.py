@@ -9,12 +9,12 @@ import pytest
 
 from test_evaluation import metric_frame, synthetic_animals
 from test_timestral import FakeForecaster
-from tumortwin.baselines import MODELS
-from tumortwin.evaluation.design import build_origins, join_targets, target_registry
-from tumortwin.evaluation.metrics import coverage, paired_bootstrap, summarize, supports
-from tumortwin.evaluation.preclinical_timestral import export_quantile_scores, forecast_origin, model_provenance
-from tumortwin.timestral import TimestralAdapter
-from tumortwin.timestral.download import CODE_REVISION, MODEL_REVISION
+from tumorstral.baselines import MODELS
+from tumorstral.evaluation.design import build_origins, join_targets, target_registry
+from tumorstral.evaluation.metrics import coverage, paired_bootstrap, summarize, supports
+from tumorstral.evaluation.preclinical_timestral import export_quantile_scores, forecast_origin, model_provenance
+from tumorstral.timestral import TimestralAdapter
+from tumorstral.timestral.download import CODE_REVISION, MODEL_REVISION
 
 MODELS_FIVE = (*MODELS, "timestral")
 CFG = {"horizons": [3, 7, 14], "timestral": {"enabled": True, "grid_step_days": 1.}}
@@ -111,7 +111,7 @@ def test_quantile_scores_keep_negative_values_and_exclude_invalid_distributions(
     # One animal has two origins and another has one: equal animal weighting, not row weighting.
     truth = five_model_frame()
     quantiles = []
-    from tumortwin.timestral import QUANTILE_LEVELS
+    from tumorstral.timestral import QUANTILE_LEVELS
 
     for origin, prediction in zip(truth.origin_id.unique(), [-2., -6., -10.], strict=True):
         for level in QUANTILE_LEVELS:
@@ -134,18 +134,18 @@ def test_quantile_scores_keep_negative_values_and_exclude_invalid_distributions(
 
 
 def test_local_weights_and_code_are_checked_without_network(tmp_path, monkeypatch):
-    from tumortwin.data.inspectumours import sha256
+    from tumorstral.data.inspectumours import sha256
 
     artifact = tmp_path/"synthetic.bin"
     artifact.write_bytes(b"explicitly synthetic model fixture")
     hashes = {artifact.name: sha256(artifact)}
-    monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.HASHES", hashes)
+    monkeypatch.setattr("tumorstral.evaluation.preclinical_timestral.HASHES", hashes)
     manifest = dict(repository="mistralai/Timestral-5M", model_revision=MODEL_REVISION,
                     code_revision=CODE_REVISION, files=hashes)
     (tmp_path/"provenance.json").write_text(json.dumps(manifest))
     dist = SimpleNamespace(read_text=lambda name: json.dumps({"vcs_info": {"commit_id": CODE_REVISION}}))
-    monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.metadata.distribution", lambda name: dist)
-    monkeypatch.setattr("tumortwin.evaluation.preclinical_timestral.metadata.version", lambda name: "synthetic")
+    monkeypatch.setattr("tumorstral.evaluation.preclinical_timestral.metadata.distribution", lambda name: dist)
+    monkeypatch.setattr("tumorstral.evaluation.preclinical_timestral.metadata.version", lambda name: "synthetic")
     cfg = {"timestral": {"model_revision": MODEL_REVISION, "local_model": ".", "grid_step_days": 1., "threads": 1}}
     assert model_provenance(cfg, tmp_path)["zero_shot"]
     artifact.write_bytes(b"tampered synthetic weights")

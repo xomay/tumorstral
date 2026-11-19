@@ -134,7 +134,7 @@ def write_human_report(predictions: pd.DataFrame, quantiles: pd.DataFrame,
     output = Path(output)
     figures = output/"figures"
     figures.mkdir(parents=True, exist_ok=True)
-    (output/"glossary.md").write_text(files("tumortwin").joinpath("glossary.md").read_text(encoding="utf-8"),
+    (output/"glossary.md").write_text(files("tumorstral").joinpath("glossary.md").read_text(encoding="utf-8"),
                                       encoding="utf-8")
     selected.to_csv(output/"report_examples.csv", index=False)
     time_label, volume_label = metadata["time_label"], metadata["volume_label"]

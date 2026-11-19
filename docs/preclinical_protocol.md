@@ -22,7 +22,7 @@ intervention pharmacologique ou d'aligner les courbes sur son administration.
 
 ## 2. Données et horizons disponibles
 
-Conserver le [RDA](../src/tumortwin/glossary.md#rda) et sa révision source ; vérifier son [SHA-256](../src/tumortwin/glossary.md#sha-256) et
+Conserver le [RDA](../src/tumorstral/glossary.md#rda) et sa révision source ; vérifier son [SHA-256](../src/tumorstral/glossary.md#sha-256) et
 la provenance du traitement avant chaque exécution. Entrée : observations
 avec valeurs originales, jours réels et indicateurs de qualité.
 Clé individuelle : `(study, animal_id)` ; unités : mm³ et jours.
@@ -45,7 +45,7 @@ des effectifs de test ni de la convergence des ajustements. Les couples sont
 corrélés lorsqu'ils appartiennent à un même animal. Ne pas les interpréter
 comme autant d'expériences indépendantes.
 
-L'[EDA](../src/tumortwin/glossary.md#eda) a déjà porté sur tout le jeu. Le test est un ensemble réservé
+L'[EDA](../src/tumorstral/glossary.md#eda) a déjà porté sur tout le jeu. Le test est un ensemble réservé
 aux scores prédictifs après gel du protocole, **pas une évaluation externe
 aveugle**. Une confirmation indépendante demanderait d'autres données.
 
@@ -67,7 +67,7 @@ Le traitement ne sert qu'à la stratification et aux analyses descriptives.
 | Study 3 · Drug B | 10 | 8 | 2 |
 | **Total** | **130** | **104** | **26** |
 
-Trier les clés de chaque strate par [SHA-256](../src/tumortwin/glossary.md#sha-256) d'une sérialisation [JSON](../src/tumortwin/glossary.md#json) canonique
+Trier les clés de chaque strate par [SHA-256](../src/tumorstral/glossary.md#sha-256) d'une sérialisation [JSON](../src/tumorstral/glossary.md#json) canonique
 `[20261103, study, animal_id]`, avec identifiants sous forme de chaînes ; prendre
 les premiers 20 % pour le test. Cette règle évite une dépendance au générateur
 aléatoire d'une bibliothèque. Les affectations sont exportées dans un
@@ -97,7 +97,7 @@ non incluse dans le classement principal.
    disponibles à `t <= t0`. Il en faut au moins six, sur six jours distincts.
 3. Ajuster chaque modèle sur ce même préfixe, jamais sur la trajectoire complète.
 4. Émettre des prévisions à `t0 + 3`, `t0 + 7` et `t0 + 14`, que la cible soit
-   disponible ou non. L'[API](../src/tumortwin/glossary.md#api) de prévision ne reçoit aucun volume futur.
+   disponible ou non. L'[API](../src/tumorstral/glossary.md#api) de prévision ne reçoit aucun volume futur.
 5. Scorer uniquement s'il existe une mesure exploitable **exactement** au jour
    demandé. Aucune visite la plus proche, tolérance, interpolation ou extrapolation
    de la cible. Les couples sans cible restent dans le journal avec leur motif.
@@ -116,7 +116,7 @@ de la cible est fait séparément et n'altère pas le préfixe déjà construit.
 Tout désaccord futur de métadonnées est journalisé sans devenir une covariable.
 Sur le jeu actuel, aucun de ces conflits ou doublons n'a été détecté.
 
-Les [NaN](../src/tumortwin/glossary.md#nan) et observations invalides restent dans les exports ; ils ne sont pas
+Les [NaN](../src/tumorstral/glossary.md#nan) et observations invalides restent dans les exports ; ils ne sont pas
 ajustés ou scorés. Aucune imputation ni élimination automatique des valeurs
 extrêmes positives. Les origines sans cible ne prouvent pas une absence de
 progression ; les causes d'arrêt du suivi restent inconnues.
@@ -204,19 +204,19 @@ persistance. Les règles d'échec sont gelées avant l'évaluation de test.
 
 ## 7. Métriques, comparaison équitable et incertitude
 
-**Critère principal : [MAE](../src/tumortwin/glossary.md#mae) à 7 jours, moyenne par animal puis entre animaux.**
+**Critère principal : [MAE](../src/tumorstral/glossary.md#mae) à 7 jours, moyenne par animal puis entre animaux.**
 Pour chaque horizon et animal, calculer la moyenne des erreurs absolues sur
 ses origines ; puis donner le même poids à chaque animal. Les animaux suivis
 plus longtemps ne dominent ainsi pas automatiquement le résultat.
 
 Compléter par :
 
-- [RMSE](../src/tumortwin/glossary.md#rmse) en mm³ : racine de la moyenne entre animaux de leurs [MSE](../src/tumortwin/glossary.md#mse) respectives.
+- [RMSE](../src/tumorstral/glossary.md#rmse) en mm³ : racine de la moyenne entre animaux de leurs [MSE](../src/tumorstral/glossary.md#mse) respectives.
 - Erreur signée moyenne, en mm³, pour voir sur/sous-estimation.
 - Erreur relative absolue `abs(pred-y)/y`, pour `y > 0` seulement ; rapporter
   médiane et proportion de cibles admissibles. Elle sera secondaire, car de
   petits volumes peuvent produire d'énormes pourcentages. Aucun dénominateur
-  artificiel ajouté et aucune exclusion de ces petites cibles des [MAE](../src/tumortwin/glossary.md#mae)/[RMSE](../src/tumortwin/glossary.md#rmse).
+  artificiel ajouté et aucune exclusion de ces petites cibles des [MAE](../src/tumorstral/glossary.md#mae)/[RMSE](../src/tumorstral/glossary.md#rmse).
 - Effectifs d'animaux, origines et cibles ; taux d'échec et alertes numériques,
   par modèle, horizon, étude et traitement. Les petits sous-groupes restent
   descriptifs et ne donnent pas lieu à un classement statistique.
@@ -236,7 +236,7 @@ remplacées par la dernière observation. Publier fréquence de repli et scores
 séparément des modèles natifs. Ce complément évalue une procédure utilisable
 sans faire disparaître les cas difficiles.
 
-Comparer les différences de [MAE](../src/tumortwin/glossary.md#mae) à persistance de façon appariée, sur le même
+Comparer les différences de [MAE](../src/tumorstral/glossary.md#mae) à persistance de façon appariée, sur le même
 support et avec la même pondération. Un score relatif
 `1 - MAE_modele/MAE_persistance` peut être ajouté si le dénominateur est >0.
 Un score négatif signifie une dégradation ; une égalité ou un résultat
@@ -260,13 +260,13 @@ les trois cibles, avec les effectifs restants et le biais vers les suivis longs.
 | Emplacement | Contenu |
 | --- | --- |
 | `configs/baselines.toml` | horizons, séparation, bornes, solveur, graines, métriques |
-| `src/tumortwin/baselines/` | interface commune, quatre modèles, diagnostics |
-| `src/tumortwin/evaluation/` | manifeste d'animaux, origines, scoring et bootstrap |
+| `src/tumorstral/baselines/` | interface commune, quatre modèles, diagnostics |
+| `src/tumorstral/evaluation/` | manifeste d'animaux, origines, scoring et bootstrap |
 | `tests/test_baselines.py` | formules, ajustements synthétiques et échecs |
 | `tests/test_evaluation.py` | absence de fuite et comparaison équitable |
 | `reports/baselines/` | protocole figé, manifeste, prévisions, scores, figures, rapport |
 
-La [CLI](../src/tumortwin/glossary.md#cli) sépare explicitement la création du split,
+La [CLI](../src/tumorstral/glossary.md#cli) sépare explicitement la création du split,
 le développement, le gel et l'évaluation finale : `baselines split`, `baselines develop`,
 `baselines freeze` et `baselines evaluate`.
 Les sorties sont dans un sous-dossier identifié par empreinte du protocole,
@@ -297,7 +297,7 @@ Tests hors réseau, données synthétiques explicitement identifiées :
 4. Modifier les volumes futurs ne change ni ajustement ni prévision d'une origine.
    Ajouter un conflit futur de métadonnées ne change pas son contexte historique.
 5. Jours irréguliers conservés ; cible exacte seulement ; absence de cible,
-   doublons, [NaN](../src/tumortwin/glossary.md#nan) et erreurs numériques traçables sans suppression silencieuse.
+   doublons, [NaN](../src/tumorstral/glossary.md#nan) et erreurs numériques traçables sans suppression silencieuse.
 6. Métriques vérifiées sur exemples calculables à la main, pondération par
    animal, support commun identique, dénominateurs nuls et replis explicites.
 7. Bootstrap groupé et apparié reproductible ; aucune écriture dans les bruts ;

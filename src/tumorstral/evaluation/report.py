@@ -213,7 +213,7 @@ Aucun intervalle artificiel n'est attribué aux modèles déterministes.
 Le corpus de préentraînement peut contenir des données apparentées ; l'absence
 de recouvrement avec INSPECTumours n'est pas démontrée.
 """
-    report = f"""# TumorTwin — Modèles de référence : {partition}
+    report = f"""# tumorstral — Modèles de référence : {partition}
 
 [Glossaire local]({relative_glossary}) · [Protocole figé](../protocol.md) · [Provenance](../provenance.json)
 

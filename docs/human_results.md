@@ -35,7 +35,7 @@ d'une mesure numérique à la visite suivante. Les cinq modèles produisent une
 prévision sur ces mêmes 91 couples. Le délai réel est variable : médiane
 **42 jours**, minimum 20, maximum 130. Il ne s'agit pas d'un horizon fixe de sept jours.
 
-| Modèle | [MAE](../src/tumortwin/glossary.md#mae), mm³ estimés | [RMSE](../src/tumortwin/glossary.md#rmse), mm³ estimés |
+| Modèle | [MAE](../src/tumorstral/glossary.md#mae), mm³ estimés | [RMSE](../src/tumorstral/glossary.md#rmse), mm³ estimés |
 | --- | ---: | ---: |
 | Persistance | **7 626,44** | **25 863,83** |
 | Exponentiel | 12 061,70 | 32 914,52 |
@@ -53,7 +53,7 @@ ne démontrent pas un classement universel ni une aptitude clinique.
 
 ## Quantiles et intervalles de Timestral
 
-La [pinball loss](../src/tumortwin/glossary.md#pinball-loss), moyennée sur les
+La [pinball loss](../src/tumorstral/glossary.md#pinball-loss), moyennée sur les
 21 quantiles puis par patient, vaut **5 486,12 mm³ estimés** sur le critère principal.
 Aucun intervalle artificiel n'est attribué aux quatre modèles déterministes.
 
@@ -115,7 +115,7 @@ une hypothèse qui doit rester explicite dans l'interprétation.
 
 Le protocole, les poids et le code officiel sont figés. Les prévisions sont
 enregistrées avant jonction des volumes futurs, les jours manquants ne sont pas
-interpolés par TumorTwin et aucun fine-tuning ou recalibrage externe n'est effectué.
+interpolés par tumorstral et aucun fine-tuning ou recalibrage externe n'est effectué.
 Les quantiles quotidiens complets sont exportés dans daily_quantiles.csv.
 Les empreintes du gel et des artefacts terminés sont dans la provenance de synthèse.
 

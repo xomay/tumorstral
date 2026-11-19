@@ -4,7 +4,7 @@
 
 L'expérience utilise le supplément original S1 Data de Laleh et al. (2022),
 identifié par [DOI](https://doi.org/10.1371/journal.pcbi.1009822.s006) et empreinte
-[SHA-256](../src/tumortwin/glossary.md#sha-256). Les cinq feuilles contiennent les
+[SHA-256](../src/tumorstral/glossary.md#sha-256). Les cinq feuilles contiennent les
 identifiants anonymes, le jour relatif au traitement, le diamètre de la lésion
 cible en millimètres et le bras d'étude. L'original est conservé sans modification.
 
@@ -66,8 +66,8 @@ Le code officiel est figé à `a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff` ; les p
 empreintes et licences du code et des poids, qui sont distinctes.
 
 Chaque contexte est placé sur une grille quotidienne. Les jours sans mesure
-contiennent [NaN](../src/tumortwin/glossary.md#nan) et un masque d'absence ; ce ne
-sont pas nécessairement des visites manquées. TumorTwin n'interpole ni ne remplit
+contiennent [NaN](../src/tumorstral/glossary.md#nan) et un masque d'absence ; ce ne
+sont pas nécessairement des visites manquées. tumorstral n'interpole ni ne remplit
 ces positions. **Le code officiel propage toutefois les valeurs antérieures en
 interne, tout en conservant le masque** ; cette hypothèse est enregistrée.
 Les dates ne sont jamais assimilées aux rangs d'observation. La densité et la
@@ -84,15 +84,15 @@ aux seules analyses exploratoires.
 
 ## Mesures de performance et graphiques
 
-La comparaison ponctuelle utilise [MAE](../src/tumortwin/glossary.md#mae),
-[RMSE](../src/tumortwin/glossary.md#rmse) et biais sur les mêmes couples pour
+La comparaison ponctuelle utilise [MAE](../src/tumorstral/glossary.md#mae),
+[RMSE](../src/tumorstral/glossary.md#rmse) et biais sur les mêmes couples pour
 les cinq modèles. Les erreurs sont moyennées par patient puis entre patients.
 Les supports propres à chaque modèle et leur couverture sont publiés séparément.
 Les différences à persistance sont accompagnées d'intervalles exploratoires
 issus de 2 000 tirages appariés de patients, stratifiés par étude, à partir de
 dix patients évaluables. Les très petites cibles ne sont pas retirées des erreurs.
 
-Le critère probabiliste principal est la [pinball loss](../src/tumortwin/glossary.md#pinball-loss),
+Le critère probabiliste principal est la [pinball loss](../src/tumorstral/glossary.md#pinball-loss),
 moyennée sur les 21 niveaux puis par patient, pour la prochaine visite après
 six mesures. Les couvertures et largeurs des intervalles à 80 % et 90 % sont
 rapportées avec leurs effectifs. Aucun intervalle artificiel n'est attribué

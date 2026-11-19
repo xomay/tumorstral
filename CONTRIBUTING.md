@@ -1,4 +1,4 @@
-# Contributing to TumorTwin
+# Contributing to tumorstral
 
 Contributions improving correctness, reproducibility and clarity are welcome.
 Use [issues](https://github.com/xomay/tumortwin/issues) to report bugs or discuss
@@ -7,8 +7,8 @@ changes that affect the scientific protocol.
 ## Set up a checkout
 
 ```sh
-git clone https://github.com/xomay/tumortwin.git
-cd tumortwin
+git clone https://github.com/xomay/tumortwin.git tumorstral
+cd tumorstral
 uv sync --locked
 uv run --offline pytest
 uv build
@@ -44,7 +44,7 @@ reproduce a source-specific issue.
 - Use deterministic seeds and record data, code, configuration and model hashes.
 - Keep historical experiment snapshots intact. Use a new run directory for
   changed data, protocols or implementations.
-- Link acronyms to the [glossary](src/tumortwin/glossary.md), expand plot labels,
+- Link acronyms to the [glossary](src/tumorstral/glossary.md), expand plot labels,
   and include a local glossary in exported reports.
 
 The source layout and additional conventions are in [AGENTS.md](AGENTS.md).

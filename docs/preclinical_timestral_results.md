@@ -24,7 +24,7 @@ Après au moins six mesures passées, **18 animaux** disposent de cibles exactes
 numérique est de 100 %, sans repli. Les quatre références reproduisent leurs
 scores antérieurs sur les mêmes supports ; leurs réglages n'ont pas changé.
 
-| Modèle | [Erreur absolue moyenne](../src/tumortwin/glossary.md#mae), mm³ | [Racine de l'erreur quadratique moyenne](../src/tumortwin/glossary.md#rmse), mm³ |
+| Modèle | [Erreur absolue moyenne](../src/tumorstral/glossary.md#mae), mm³ | [Racine de l'erreur quadratique moyenne](../src/tumorstral/glossary.md#rmse), mm³ |
 | --- | ---: | ---: |
 | Persistance | 754,77 | 891,12 |
 | Exponentiel | 659,28 | 4 881,27 |
@@ -51,8 +51,8 @@ cette expérience et ne prouve pas une supériorité universelle.
 ## Prévisions probabilistes brutes
 
 À sept jours, les 91 distributions sont finies et ordonnées. Le score de
-[quantiles](../src/tumortwin/glossary.md#quantile)
-([pinball loss](../src/tumortwin/glossary.md#pinball-loss)) vaut **271,90 mm³**,
+[quantiles](../src/tumorstral/glossary.md#quantile)
+([pinball loss](../src/tumorstral/glossary.md#pinball-loss)) vaut **271,90 mm³**,
 moyenné sur les 21 niveaux, puis par animal.
 
 | Intervalle annoncé | Couverture observée, pondérée par animal | Largeur moyenne, mm³ |

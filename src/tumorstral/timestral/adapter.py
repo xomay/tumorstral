@@ -4,7 +4,7 @@ Source API inspected at mistralai/timestral revision
 a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff, src/timestral/forecaster.py.
 The upstream implementation forward-fills missing inputs internally, retains
 their observation mask and left-pads partial patches with unobserved zeros.
-TumorTwin preserves NaNs and masks in its exported grid and does not create
+tumorstral preserves NaNs and masks in its exported grid and does not create
 observations. Raw quantile caps and nonnegative clipping are explicitly disabled;
 symmetric averaging remains an explicit, recorded inference option.
 """

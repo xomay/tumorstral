@@ -1,6 +1,6 @@
 # Third-party data and models
 
-The MIT licence at the repository root applies to original TumorTwin code and
+The MIT licence at the repository root applies to original tumorstral code and
 documentation. It does not replace the licences of dependencies, datasets,
 model weights or source-derived material. Raw datasets and model weights are
 downloaded separately and are not distributed in this repository.
@@ -26,7 +26,7 @@ chemotherapy and immunotherapy.* PLOS Computational Biology 18(2): e1009822.
 The publication and supporting material are released under the Creative
 Commons Attribution licence stated on the article. Human figures and summaries
 in `reports/human_review/` and `docs/human_results.md` are derived from this
-public supplement. TumorTwin computes estimated volumes as `0.5 × diameter_mm³`,
+public supplement. tumorstral computes estimated volumes as `0.5 × diameter_mm³`,
 preserves the published relative days, and does not apply whole-dataset
 normalization. The curated figures show anonymized source identifiers.
 These derived analyses are not original study outcomes or segmented volumes.
@@ -39,7 +39,7 @@ Source: [Mistral AI Timestral](https://github.com/mistralai/timestral), revision
 `a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff`.
 The optional upstream implementation is licensed under
 [Apache License 2.0](https://github.com/mistralai/timestral/blob/a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff/LICENSE)
-and is installed as a dependency, not copied into TumorTwin's source tree.
+and is installed as a dependency, not copied into tumorstral's source tree.
 
 ## Timestral model weights
 
@@ -48,7 +48,7 @@ revision `bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f`.
 The weights use a separate
 [Modified MIT licence](https://huggingface.co/mistralai/Timestral-5M/blob/bdd20cfc15a3fea0e4cb5ccef37f8d3ca7aa335f/LICENSE)
 with additional conditions, including a commercial revenue restriction.
-This is not standard MIT and is not replaced by TumorTwin's code licence.
+This is not standard MIT and is not replaced by tumorstral's code licence.
 The download keeps the model's own `LICENSE` and checksums locally.
 
 ## Other dependencies

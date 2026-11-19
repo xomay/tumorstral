@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tumortwin.evaluation.human_report import comparison_support, write_human_report
+from tumorstral.evaluation.human_report import comparison_support, write_human_report
 
 
 def synthetic_frames():

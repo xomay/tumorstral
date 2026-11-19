@@ -1,15 +1,15 @@
-# TumorTwin
+# tumorstral
 
 **Reproducible tumour growth forecasting from longitudinal measurements.**
 
-TumorTwin compares individual growth models with zero-shot Timestral forecasts
+tumorstral compares individual growth models with zero-shot Timestral forecasts
 on preclinical and human tumour trajectories. It combines data quality checks,
 patient-level holdouts, probabilistic evaluation and plots of predictions against
 observations in a Python package with a reproducible command-line interface.
 
 [Getting started](#getting-started) · [Human trajectories](#human-trajectories) ·
 [Documentation](docs/README.md) · [Contributing](CONTRIBUTING.md) ·
-[Glossary](src/tumortwin/glossary.md)
+[Glossary](src/tumorstral/glossary.md)
 
 ## Features
 
@@ -32,25 +32,30 @@ decisions have not been established.
 Install [uv](https://docs.astral.sh/uv/) and Git, then clone the repository:
 
 ```sh
-git clone https://github.com/xomay/tumortwin.git
-cd tumortwin
+git clone https://github.com/xomay/tumortwin.git tumorstral
+cd tumorstral
 uv sync --locked
-uv run tumortwin --help
+uv run tumorstral --help
 ```
 
 The package supports Python 3.11 or newer. The checkout selects Python 3.14;
 `uv.lock` records dependency versions. R is not required to read the example data.
 
+The Python package and command are named `tumorstral`. After updating an existing
+checkout, run `uv sync --locked` to install the renamed command. The GitHub URL
+above remains the current hosting address; the local checkout is named `tumorstral`.
+Recorded experiment snapshots retain their original package names and checksums.
+
 Download and explore the preclinical example:
 
 ```sh
-uv run tumortwin download
-uv run tumortwin eda
+uv run tumorstral download
+uv run tumorstral eda
 ```
 
 Open `reports/exploration.md` for quality checks, trajectory statistics and figures.
-A local [CSV](src/tumortwin/glossary.md#csv) with the documented schema can be supplied
-with `uv run tumortwin eda --input /path/to/data.csv`.
+A local [CSV](src/tumorstral/glossary.md#csv) with the documented schema can be supplied
+with `uv run tumorstral eda --input /path/to/data.csv`.
 
 ## Human trajectories
 
@@ -59,12 +64,12 @@ supplement and pinned Timestral weights:
 
 ```sh
 uv sync --locked --extra timestral
-uv run --extra timestral tumortwin human download
-uv run --extra timestral tumortwin human audit
-uv run --extra timestral tumortwin human split
-uv run --extra timestral tumortwin human develop
-uv run --extra timestral tumortwin human freeze
-uv run --extra timestral tumortwin human evaluate
+uv run --extra timestral tumorstral human download
+uv run --extra timestral tumorstral human audit
+uv run --extra timestral tumorstral human split
+uv run --extra timestral tumorstral human develop
+uv run --extra timestral tumorstral human freeze
+uv run --extra timestral tumorstral human evaluate
 ```
 
 The workflow separates patient allocation, development diagnostics, configuration
@@ -80,10 +85,10 @@ run offline with `uv run --offline ...`.
 ## Preclinical benchmarks
 
 ```sh
-uv run tumortwin baselines split
-uv run tumortwin baselines develop
-uv run tumortwin baselines freeze
-uv run tumortwin baselines evaluate
+uv run tumorstral baselines split
+uv run tumorstral baselines develop
+uv run tumorstral baselines freeze
+uv run tumorstral baselines evaluate
 ```
 
 `configs/baselines.toml` defines exact 3-, 7- and 14-day horizons, with at least
@@ -96,11 +101,11 @@ targets**, use the dedicated configuration:
 
 ```sh
 uv sync --locked --extra timestral
-uv run --extra timestral tumortwin baselines download-model --config configs/preclinical_timestral.toml
-uv run --extra timestral tumortwin baselines split --config configs/preclinical_timestral.toml
-uv run --extra timestral tumortwin baselines develop --config configs/preclinical_timestral.toml
-uv run --extra timestral tumortwin baselines freeze --config configs/preclinical_timestral.toml
-uv run --extra timestral tumortwin baselines evaluate --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines download-model --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines split --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines develop --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines freeze --config configs/preclinical_timestral.toml
+uv run --extra timestral tumorstral baselines evaluate --config configs/preclinical_timestral.toml
 ```
 
 Freeze requires committed code and completed development. Inference then runs
@@ -132,14 +137,14 @@ past values forward while retaining the mask. Raw negative forecasts and
 quantiles remain visible, without silent clipping or external recalibration.
 
 Sources are downloaded separately and checked using
-[SHA-256](src/tumortwin/glossary.md#sha-256). Data and model licences are distinct
+[SHA-256](src/tumorstral/glossary.md#sha-256). Data and model licences are distinct
 from the project code licence; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
 ## Reference results
 
 In the recorded human experiment, 91 held-out patients had a usable next visit
 after six observations. The visit delay had a median of 42 days. The
-[mean absolute error](src/tumortwin/glossary.md#mae) was 7,626 mm³ estimated for
+[mean absolute error](src/tumorstral/glossary.md#mae) was 7,626 mm³ estimated for
 persistence and 8,524 mm³ estimated for the Timestral median. Timestral did not
 improve point accuracy in that comparison; some raw intervals were wide and
 included negative values.
@@ -164,14 +169,14 @@ Detailed methods and experiment reports are currently written in French.
 | [Preclinical results](docs/preclinical_results.md) | Recorded benchmark and limitations |
 | [Data checks](docs/data_checks.md) | Source inspection and exploratory checks |
 | [Data guide](data/README.md) | Source formats and provenance |
-| [Glossary](src/tumortwin/glossary.md) | Acronyms and evaluation terms |
+| [Glossary](src/tumorstral/glossary.md) | Acronyms and evaluation terms |
 
 ## Project layout
 
 ```text
 configs/                   Exploration and forecasting configurations
 docs/                      Methods, data checks and reference experiments
-src/tumortwin/
+src/tumorstral/
     data/                  Data access, adapters and quality checks
     baselines/             Individual mechanistic models
     timestral/             Optional zero-shot forecasting adapter
@@ -195,10 +200,10 @@ and bug reports.
 
 ## Licence and attribution
 
-Original TumorTwin code is distributed under the [MIT licence](LICENSE).
+Original tumorstral code is distributed under the [MIT licence](LICENSE).
 Datasets, model weights and dependencies retain their own terms. In particular,
 Timestral weights use a **Modified MIT licence with additional conditions**;
-they are not covered by TumorTwin's MIT licence.
+they are not covered by tumorstral's MIT licence.
 
 Please cite the original data and model sources when reporting results.
 Attribution details are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

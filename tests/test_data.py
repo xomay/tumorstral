@@ -5,8 +5,8 @@ import json
 import pandas as pd
 import pytest
 
-from tumortwin.data.inspectumours import COLUMNS, download, load_raw, sha256
-from tumortwin.data.quality import animal_summary, normalize, quality_report
+from tumorstral.data.inspectumours import COLUMNS, download, load_raw, sha256
+from tumorstral.data.quality import animal_summary, normalize, quality_report
 
 
 def test_identity_missing_and_real_days(sample):
@@ -129,7 +129,7 @@ def test_download_pinned_integrity_and_no_silent_overwrite(tmp_path, monkeypatch
         calls.append(url)
         return io.BytesIO(json.dumps({"content": base64.b64encode(b"fixture").decode()}).encode())
 
-    monkeypatch.setattr("tumortwin.data.inspectumours.urlopen", fake_urlopen)
+    monkeypatch.setattr("tumorstral.data.inspectumours.urlopen", fake_urlopen)
     path = download(tmp_path)
     assert path.read_bytes() == b"fixture"
     manifest = json.loads((tmp_path / "provenance.json").read_text())

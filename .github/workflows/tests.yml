@@ -19,7 +19,7 @@ jobs:
         python: ["3.11", "3.14"]
     env:
       MPLBACKEND: Agg
-      MPLCONFIGDIR: /tmp/tumortwin-matplotlib
+      MPLCONFIGDIR: /tmp/tumorstral-matplotlib
       HF_HUB_OFFLINE: "1"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from scipy.optimize._numdiff import approx_derivative
 
-from tumortwin.baselines.models import MODELS, curve, fit_model, jacobian
+from tumorstral.baselines.models import MODELS, curve, fit_model, jacobian
 
 
 @pytest.mark.parametrize("model,parameters", [

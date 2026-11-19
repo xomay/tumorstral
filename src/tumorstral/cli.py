@@ -86,7 +86,7 @@ def main() -> None:
 
         print(json.dumps(run_eda(source, processed, reports), indent=2, ensure_ascii=False))
     except (ValueError, OSError, KeyError) as error:
-        parser.exit(2, f"tumortwin: {error}\n")
+        parser.exit(2, f"tumorstral: {error}\n")
 
 
 if __name__ == "__main__":

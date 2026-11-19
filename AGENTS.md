@@ -1,22 +1,22 @@
-# TumorTwin
+# tumorstral
 
 ## Périmètre
 Le projet couvre l'analyse exploratoire, les modèles individuels de référence
 et les prévisions zero-shot Timestral sur les données humaines Laleh.
 Suivre les protocoles `docs/preclinical_protocol.md` et `docs/human_protocol.md`.
 Ne pas ajouter de fine-tuning, calibration externe,
-serveur [MCP](src/tumortwin/glossary.md#mcp) ni interprétation clinique.
+serveur [MCP](src/tumorstral/glossary.md#mcp) ni interprétation clinique.
 
 ## Conventions
-Python >=3.11, paquet sous `src/tumortwin`, fonctions typées, chemins pathlib,
-[CLI](src/tumortwin/glossary.md#cli) reproductible. Utiliser uv, jamais pip. Dépendances figées dans uv.lock.
-Les données brutes sont immuables ; conserver leur provenance et [SHA-256](src/tumortwin/glossary.md#sha-256).
+Python >=3.11, paquet sous `src/tumorstral`, fonctions typées, chemins pathlib,
+[CLI](src/tumorstral/glossary.md#cli) reproductible. Utiliser uv, jamais pip. Dépendances figées dans uv.lock.
+Les données brutes sont immuables ; conserver leur provenance et [SHA-256](src/tumorstral/glossary.md#sha-256).
 Les tests sont hors réseau et utilisent des fixtures explicitement synthétiques.
 
 ## Accessibilité des acronymes — convention permanente
 Pour toute prochaine réalisation dans ce projet (documentation, rapport généré,
 graphique ou interface), rendre les acronymes compréhensibles sans recherche externe.
-Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossary.md).
+Le glossaire de référence est [src/tumorstral/glossary.md](src/tumorstral/glossary.md).
 
 - Relier les acronymes du texte à leur définition par des liens Markdown directs.
 - Ajouter une définition au glossaire avant d'introduire un nouvel acronyme.
@@ -41,16 +41,16 @@ Le glossaire de référence est [src/tumortwin/glossary.md](src/tumortwin/glossa
   en covariable. Reconstruire les contrôles de chaque préfixe sans données futures.
 - Comparaisons de traitements descriptives, sans inférence causale.
 - Ne pas inventer de données ni de résultats. Documenter les limites biologiques.
-- Les images [TCIA](src/tumortwin/glossary.md#tcia) ne constituent pas des trajectoires sans suivi démontré.
+- Les images [TCIA](src/tumorstral/glossary.md#tcia) ne constituent pas des trajectoires sans suivi démontré.
 
 ## Commandes
 `uv sync --locked`
 `uv run pytest`
-`uv run tumortwin download`
-`uv run tumortwin eda --config configs/exploration.toml`
-`uv run tumortwin baselines split`
-`uv run tumortwin baselines develop`
-`uv run tumortwin baselines freeze`
-`uv run tumortwin baselines evaluate`
+`uv run tumorstral download`
+`uv run tumorstral eda --config configs/exploration.toml`
+`uv run tumorstral baselines split`
+`uv run tumorstral baselines develop`
+`uv run tumorstral baselines freeze`
+`uv run tumorstral baselines evaluate`
 `uv sync --locked --extra timestral`
-`uv run --extra timestral tumortwin human evaluate`
+`uv run --extra timestral tumorstral human evaluate`

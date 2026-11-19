@@ -1,7 +1,7 @@
 # Résultats de référence — INSPECTumours
 
 Exécution du **3 novembre 2026**, sur le fichier réel INSPECTumours.
-Les [définitions des acronymes](../src/tumortwin/glossary.md) sont accessibles
+Les [définitions des acronymes](../src/tumorstral/glossary.md) sont accessibles
 depuis les liens ci-dessous. Aucun résultat synthétique n'entre dans ce bilan.
 
 ## Référence reproductible
@@ -44,7 +44,7 @@ après un historique d'au moins six mesures. Cela donne **91 couples
 origine/cible**, identiques pour les quatre modèles. La couverture de prévision
 valide est de 100 %, ainsi que le support commun ; aucun repli n'a été nécessaire.
 
-| Modèle | [MAE](../src/tumortwin/glossary.md#mae), mm³ | [RMSE](../src/tumortwin/glossary.md#rmse), mm³ | Différence de MAE à persistance, mm³ | Intervalle exploratoire à 95 % de la différence |
+| Modèle | [MAE](../src/tumorstral/glossary.md#mae), mm³ | [RMSE](../src/tumorstral/glossary.md#rmse), mm³ | Différence de MAE à persistance, mm³ | Intervalle exploratoire à 95 % de la différence |
 | --- | ---: | ---: | ---: | --- |
 | Persistance | 754,77 | 891,12 | 0,00 | Référence |
 | Exponentiel | 659,28 | 4 881,27 | −95,49 | [−528,83 ; +614,79] |

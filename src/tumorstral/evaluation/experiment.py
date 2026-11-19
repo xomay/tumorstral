@@ -96,7 +96,7 @@ def load_experiment(config_path: Path) -> tuple[dict, Path, Path, pd.DataFrame, 
                       code_sha256=digest(code), git_commit=commit, working_tree_dirty=dirty,
                       python=platform.python_version(),
                       packages={p: metadata.version(p) for p in
-                                ["tumortwin", "numpy", "pandas", "scipy", "matplotlib"]})
+                                ["tumorstral", "numpy", "pandas", "scipy", "matplotlib"]})
     if enabled(cfg):
         from .preclinical_timestral import model_provenance
 
@@ -121,14 +121,14 @@ def prepare(config_path: Path) -> tuple[dict, Path, pd.DataFrame, pd.DataFrame, 
     immutable(run/"split.csv", split.to_csv(index=False))
     immutable(run/"provenance.json", json_text(provenance))
     immutable(run/"protocol.md", (root/cfg["protocol"]).read_text(encoding="utf-8").replace(
-        "../src/tumortwin/glossary.md", "glossary.md"))
+        "../src/tumorstral/glossary.md", "glossary.md"))
     immutable(run/"config.toml", config_path.read_text(encoding="utf-8"))
-    immutable(run/"glossary.md", files("tumortwin").joinpath("glossary.md").read_text(encoding="utf-8"))
+    immutable(run/"glossary.md", files("tumorstral").joinpath("glossary.md").read_text(encoding="utf-8"))
     design_files = ["split.csv", "provenance.json", "protocol.md", "config.toml", "glossary.md", "examples.csv"]
     if enabled(cfg) and "reference_protocol" in cfg:
         root = (config_path.resolve().parent/cfg.get("project_root", "..")).resolve()
         immutable(run/"preclinical_protocol.md", (root/cfg["reference_protocol"]).read_text().replace(
-            "../src/tumortwin/glossary.md", "glossary.md"))
+            "../src/tumorstral/glossary.md", "glossary.md"))
         design_files.append("preclinical_protocol.md")
     # Choose examples using identity and allocation hash before calculating any errors.
     examples = (split.sort_values("allocation_hash").groupby(["partition", "study", "treatment"])
