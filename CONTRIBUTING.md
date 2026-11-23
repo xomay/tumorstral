@@ -1,13 +1,13 @@
 # Contributing to tumorstral
 
 Contributions improving correctness, reproducibility and clarity are welcome.
-Use [issues](https://github.com/xomay/tumortwin/issues) to report bugs or discuss
+Use [issues](https://github.com/xomay/tumorstral/issues) to report bugs or discuss
 changes that affect the scientific protocol.
 
 ## Set up a checkout
 
 ```sh
-git clone https://github.com/xomay/tumortwin.git tumorstral
+git clone https://github.com/xomay/tumorstral.git tumorstral
 cd tumorstral
 uv sync --locked
 uv run --offline pytest

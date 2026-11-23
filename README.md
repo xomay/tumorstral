@@ -32,7 +32,7 @@ decisions have not been established.
 Install [uv](https://docs.astral.sh/uv/) and Git, then clone the repository:
 
 ```sh
-git clone https://github.com/xomay/tumortwin.git tumorstral
+git clone https://github.com/xomay/tumorstral.git tumorstral
 cd tumorstral
 uv sync --locked
 uv run tumorstral --help
@@ -42,8 +42,7 @@ The package supports Python 3.11 or newer. The checkout selects Python 3.14;
 `uv.lock` records dependency versions. R is not required to read the example data.
 
 The Python package and command are named `tumorstral`. After updating an existing
-checkout, run `uv sync --locked` to install the renamed command. The GitHub URL
-above remains the current hosting address; the local checkout is named `tumorstral`.
+checkout, run `uv sync --locked` to install the renamed command. The GitHub repository and local checkout are both named `tumorstral`.
 Recorded experiment snapshots retain their original package names and checksums.
 
 Download and explore the preclinical example:

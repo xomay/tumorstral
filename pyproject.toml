@@ -27,9 +27,9 @@ dev = ["pytest>=8.3"]
 tumorstral = "tumorstral.cli:main"
 
 [project.urls]
-Repository = "https://github.com/xomay/tumortwin"
-Documentation = "https://github.com/xomay/tumortwin#readme"
-Issues = "https://github.com/xomay/tumortwin/issues"
+Repository = "https://github.com/xomay/tumorstral"
+Documentation = "https://github.com/xomay/tumorstral#readme"
+Issues = "https://github.com/xomay/tumorstral/issues"
 
 [project.optional-dependencies]
 timestral = [
